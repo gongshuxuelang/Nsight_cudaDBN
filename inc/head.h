@@ -27,8 +27,10 @@
 
 #include "Matrix.h" //矩阵类
 #include "rwDate.h" //读写文件类
-#include "rwDate_dec.h"
-#include "DWT_init.h"
+#include "rwDate_dec.h"//读文件子类
+#include "DWT_init.h"//DWT 初始化头文件
+#include "deviceGpu.h"//GPU函数库
+#include "hostThreads.h"//设备线程头文件
 
 //字母说明，dec为分解，signal为信号，Len为长度，filter为滤波器，
  //EX为延拓，CON为卷积，DSam为下采样，D为下，sam为采样。L为低频信号，H为高频信号
