@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
-org.eclipse.cdt.core.code_formatter=org.eclipse.cdt.core.defaultCodeFormatter
+org.eclipse.cdt.core.code_formatter=com.nvidia.cuda.ide.cudacFormatter
 org.eclipse.cdt.core.formatter.alignment_for_arguments_in_method_invocation=16
 org.eclipse.cdt.core.formatter.alignment_for_assignment=16
 org.eclipse.cdt.core.formatter.alignment_for_base_clause_in_type_declaration=80

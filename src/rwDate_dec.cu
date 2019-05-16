@@ -7,12 +7,21 @@
     读取的文件格式是sm_n mode= 0的时候。
     mode = 1的时候为 SLm；
 */
-pRWD rwDate_dec::getRaw_Data(){return pRWdate;} 
+rwDate_dec::rwDate_dec(int dbn_n,int row,int line,int m,int n, int mo)
+{
+	DBN_N = dbn_n;
+	data_row = row;
+	data_line = line;
+	file_m = m;
+	file_n = n;
+	mode = mo;
+}
+rwDate_dec::~rwDate_dec()
+{
+
+}
 bool rwDate_dec::ReadDate()
 {
-    pRWdate = new RWD; //申请原始数据内存；
-    pRWdate -> Raw_Data = std::vector<std::vector<double> >(data_row, std::vector<double>(data_line));//c初始化内存大小   
-    
     std::string file_directory  = "../date/EEG/s";//文件目录用来区分读取EEG和label的，EEG为s，label为SL
     std::string file_directory1 = "../date/label/SL";
     std::string file_temporary;//  这个是一个文件夹变量
@@ -36,19 +45,16 @@ bool rwDate_dec::ReadDate()
         file_temporary.append("_");
         file_temporary.append(B);
         file_temporary.append(".txt");
-
         //测试点
         std::cout << "file_temporary = " << file_temporary << std::endl;
-        
-        std::ifstream ifstr_data(file_temporary);	//读文件  
+        double rtdata;
+//        std::ifstream ifstr_data(file_temporary);	//读文件
         //测试文件
-        //std::ifstream ifstr_data("/home/lcx/code/testdate/1.txt");
-        for(std::vector<double>::size_type i = 0; i != pRWdate -> Raw_Data.size(); ++i)//  把文件读到内存中
+        std::ifstream ifstr_data("/home/lcx/cuda-workspace/Nsight_cudaDBN/测试数据/1.txt");
+        for(std::vector<double>::size_type i = 0; i < data_row * data_line; ++i)//  把文件读到内存中
         {
-            for(std::vector<double>::size_type j = 0; j != pRWdate -> Raw_Data[i].size(); ++j)
-            {            
-                ifstr_data >> pRWdate -> Raw_Data[i][j];                            
-            }            
+        	ifstr_data >> rtdata;
+        	rData.push_back(rtdata);
         }
     }                   
     else
@@ -69,13 +75,13 @@ bool rwDate_dec::Write_Date()
 
 void rwDate_dec::Print_rwDate()
 {
-    std::cout << "print_rwDate:"<<  pRWdate -> Raw_Data.size() << std::endl;
-    std::cout  << "print_rwDate:"<< (pRWdate -> Raw_Data[0]).size()<< std::endl;
-    for(std::vector<double>::size_type i = 0; i != pRWdate -> Raw_Data.size(); ++i)
+    std::cout << "print_rwDate:"<<  data_row << std::endl;
+    std::cout  << "print_rwDate:"<< data_line << std::endl;
+    for(std::vector<double>::size_type i = 0; i < data_row; ++i)
     {
-        for(std::vector<double>::size_type j = 0; j != pRWdate -> Raw_Data[i].size(); ++j)
+        for(std::vector<double>::size_type j = 0; j < data_line; ++j)
         {
-            std::cout << pRWdate -> Raw_Data[i][j] << " ";
+            std::cout << rData[i * data_line + j] << " ";
         }
         std::cout<< std::endl;
     }

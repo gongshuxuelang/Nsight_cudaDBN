@@ -21,7 +21,7 @@ class DWT
            
         }    
         ~DWT(){}
-        int getDWT_DBN(){return DBN;}               //获取DBN_N 值
+        int getDWT_DBN(){return DBN;}               //获取DBN 值
         int getDWT_DBN_N(){return DBN_N;}           //获取DBN_N 值
         int getDWT_data_row(){return data_row;}     //获取data_row值
         int getDWT_data_line(){return data_line;}   //获取data_line值

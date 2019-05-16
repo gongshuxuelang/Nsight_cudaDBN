@@ -9,12 +9,25 @@
 #include <algorithm>
 #include <string>
 #include <cassert>
+#include <cstdlib>
 
+
+#include <cuda.h>
 #include <numeric>
 #include <thrust/reduce.h>
+#include <thrust/device_ptr.h>
+#include <thrust/device_malloc.h>
+#include <thrust/device_free.h>
 #include <thrust/device_vector.h>
+#include <thrust/host_vector.h>
+#include <thrust/generate.h>
+#include <thrust/sort.h>
+#include <thrust/copy.h>
+#include <thrust/fill.h>
+#include <thrust/sequence.h>
 #include <cuda_runtime.h> //cuda头文件
 
+#include <boost/system/error_code.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/atomic.hpp>//boost原子操作
 #define  BOOST_THREAD_VERSION 5 //使用thread第五版，一共有v2,v3,v4,v5,四个版本
@@ -24,6 +37,9 @@
 #include <boost/thread/thread_guard.hpp>
 #include <boost/thread/scoped_thread.hpp>
 #include <boost/thread/shared_lock_guard.hpp>
+#include <boost/ref.hpp>			//传引用头文件
+#include <boost/bind.hpp>
+
 
 #include "Matrix.h" //矩阵类
 #include "rwDate.h" //读写文件类
