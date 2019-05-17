@@ -2,10 +2,7 @@
 //字母说明，dec为分解，signal为信号，Len为长度，filter为滤波器，
 //EX为延拓，CON为卷积，DSam为下采样，D为下，sam为采样。L为低频信号，H为高频信号
 //ref为重构，
-void funic(std::vector<double>& q)
-{
-	std::vector<double> a = q;
-}
+
 int main()
 {
 	//初始化小波分解所需要的系数，第一个参数为DBn小波，第二个系数是信号的行数，第三个系数是信号的列数
@@ -45,9 +42,9 @@ int main()
         std::cout<< std::endl;
     }
 
-    funic(rdt);
 
-    boost::thread t_HtoD0(threadHostToDevice0,boost::cref(rdt));
+
+    boost::thread t_HtoD0(threadHostToDevice0,boost::cref(rdt),dwt.getDWT_data_row(),dwt.getDWT_data_line(),dwt.getDWT_DBN_N());
     t_HtoD0.join();
 
 
