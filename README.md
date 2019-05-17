@@ -6,6 +6,10 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+
 我想到一个cuda不能使用cout函数的理由，那就是GPU并不是X86架构的，所以GPU并不能使用X86架构的函数，不仅仅是cout函数，应该是基于X86架构的一切函数都不可以使用，GPU只能使用GPU自己架构的函数，想要找现成的函数库，应该只能找NVIDIA公司提供的函数库，只能说NVIDIA公司压力不小，怎么能把C++ 这么多函数库移植到GPU设备上这才是重点。但是CUDA支持C++，应该是说的是从语法层次上说的，可以使用C++ 语法自己写算法，但是不可以使用C++标准库的函数。看来我想在GPU上使用boost库的想法是不能实现了，除非我自己移植我自己需要的boost库函数。
 
 心情很是失落，但是总算明白了。
