@@ -27,6 +27,8 @@
 #include <thrust/sequence.h>
 #include <cuda_runtime.h> //cuda头文件
 
+#include <boost/version.hpp>
+#include <boost/config.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/lexical_cast.hpp>
