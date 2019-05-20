@@ -6,7 +6,7 @@
 int main()
 {
 	//初始化小波分解所需要的系数，第一个参数为DBn小波，第二个系数是信号的行数，第三个系数是信号的列数
-    DWT dwt(4, 3, 4, 5, 0, 1, 1, 32); //参数说明，，第一参数是dbn小波，第二个参数是分解n层，第三个参数是有
+    DWT dwt(2, 3, 4, 5, 0, 1, 1, 32); //参数说明，，第一参数是dbn小波，第二个参数是分解n层，第三个参数是有
     std::vector<double> sp;
     std::cout << "测试点" << std::endl;
     Matrix max(dwt.getDWT_DBN());
@@ -42,9 +42,7 @@ int main()
         std::cout<< std::endl;
     }
 
-
-
-    boost::thread t_HtoD0(threadHostToDevice0,boost::cref(rdt),dwt.getDWT_data_row(),dwt.getDWT_data_line(),dwt.getDWT_DBN_N());
+    boost::thread t_HtoD0(threadHostToDevice0,boost::ref(rdt),dwt.getDWT_data_row(),dwt.getDWT_data_line(),dwt.getDWT_DBN(),dwt.getDWT_DBN_N());
     t_HtoD0.join();
 
 
