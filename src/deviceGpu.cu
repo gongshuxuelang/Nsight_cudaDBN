@@ -4,36 +4,11 @@
 //接收的数据为32*7681,32行互不相干。开32个线程来处理这个矩阵。d_data是数据row是行，line是列，DBN_N是分解层数
 __global__ void GPU0(double* d_a,double* max,int row,int line,int dbn,int dbn_n)
 {
-	//初始化重要的系数系数
-	printf("GPU\n");
-	int tid = threadIdx.x;
-	int decExLen  = line + 4 * dbn - 2;//对称延拓长度
-	int decCONLen = line + 2 * dbn - 1;//f分解卷积长度
-	double* d_data = d_a;
-	//构造产量内存
-//	__shared__ double* sdecLo;
-//	__shared__ double* sdecHo;
-//	__shared__ double* ssamLo;
-//	__shared__ double* ssamHo;
-//	for(int i = 0; i < 2 * dbn; ++i)
-//	{
-//		sdecLo[i] = max[0 * dbn + i];
-//		sdecHo[i] = max[1 * dbn + i];
-//		ssamLo[i] = max[2 * dbn + i];
-//		ssamHo[i] = max[3 * dbn + i];
-//	}
-	switch(tid)
+	int idx = threadIdx.x;
+	switch(idx)
 	{
 	case 0:
-		printf("EX\n");
-		double* dVectorEx = new double[decExLen];
-		dVectorEx = decTransfromEx(d_data,line,tid,dbn,decExLen);//延拓
-		for(int i = 0; i < decExLen;++i)
-		{
-			printf("%d\t",dVectorEx[i]);
-		}
-		printf("\n");
-		decTransfromCON(dVectorEx,max,line,tid,decCONLen,dbn);//卷积
+		dec(d_a,max,row,line,dbn,idx);
 
 		break;
 	case 1:
@@ -75,43 +50,47 @@ __device__ void printData(double* buffer,int row,int line)
         printf("\n");
     }
 }
-__device__ double* decTransfromEx(double* d_data,int line,int tid,int dbn,int decExLen)
+__device__ void decTransfromEx(double* d_data,int line,int idx,int dbn,int decExLen,double* dVectorEx)
 {
-	double* dVectorEx = new double[decExLen];
+	for(int i = 0; i < line; ++i)
+	{
+		printf("d_data  = %f ",d_data[i]);
+	}
+	printf("\n");
 	for(int i = 0; i < 2 * dbn - 1; ++i)
 	{
-		dVectorEx[i] = d_data[tid * line + 2 * dbn -2 - i];
-		dVectorEx[2 * dbn + line - 1 + i] = d_data[tid * line + line -1 - i];
+		dVectorEx[i] = d_data[idx * line + 2 * dbn -2 - i];
+		dVectorEx[2 * dbn + line - 1 + i] = d_data[idx * line + line -1 - i];
 	}
 	for(int i = 0; i < line; ++i)
 	{
-		dVectorEx[2 * dbn - 1 + i] = d_data[tid * line + i];
+		dVectorEx[2 * dbn - 1 + i] = d_data[idx * line + i];
 	}
-	return dVectorEx;
-}
-__global__ void dataCON(double* dVectorEx,double* sdecMaxL,double* sdecMaxH,int dbn,int decCONLen,double* dVectorCON)
-{
-
-	int tidx = threadIdx.x;
-	int bidx = blockIdx.x;
-	double temp = 0;
-	int i= 0,j = 0,ll = 0;
-	for(j = bidx * blockDim.x + tidx;j < decCONLen; j+=gridDim.x * blockDim.x)
+	for(int i = 0; i < decExLen; ++i)
 	{
-		temp = 0;
-		for(i = 0; i < decCONLen; ++i)
-		{
-			ll = j + 1;
-			temp += dVectorEx[ll] *  sdecMaxL[i];
-		}
-		dVectorCON[j] = temp;
+		printf("dVectorEx = %f ",dVectorEx[i]);
 	}
+	printf("\n");
+	return ;
 }
-__device__ double* decTransfromCON(double* dVectorEx,double* max,int line,int tid,int decCONLen,int dbn)
+__global__ void dataCON(double* dVectorEx,double* sdecMaxL,double* sdecMaxH,int dbn,int decCONLen,double* dVectorCONL,double* dVectorCONH,int idx,int decExLen)
+{
+	double tempL = 0;
+	double tempH = 0;
+	int iidx = threadIdx.x;
+	for(int i = 0; i < 2* dbn; ++i)
+	{
+		tempL += dVectorEx[iidx + i] * sdecMaxL[i];
+		tempH += dVectorEx[iidx + i] * sdecMaxH[i];
+	}
+	dVectorCONL[iidx] = tempL;
+	dVectorCONH[iidx] = tempH;
+}
+__device__ void decTransfromCON(double* dVectorEx,double* max,int line,int idx,int decCONLen,int dbn,double* dVectorCONL,double* dVectorCONH,int decExLen)
 {
 	double* sdecMaxL= new double[2 * dbn];
 	double* sdecMaxH= new double[2 * dbn];
-	double* dVectorCON = new double[decCONLen];
+
 	for(int i = 0; i < 2 * dbn; ++i)
 	{
 		sdecMaxL[i] = max[0 * 2 * dbn + i];
@@ -121,15 +100,60 @@ __device__ double* decTransfromCON(double* dVectorEx,double* max,int line,int ti
 		printf("sdecMaxH = %f\t",sdecMaxH[i]);
 		printf("\n");
 	}
-	dataCON<<<1,4>>>(dVectorEx,sdecMaxL,sdecMaxH,dbn,decCONLen,dVectorCON);
+	dataCON<<<1,decCONLen>>>(dVectorEx,sdecMaxL,sdecMaxH,dbn,decCONLen,dVectorCONL,dVectorCONH,idx,decExLen);
+}
+__global__ void decUpSam(double* dVectorCONL,double* dVectorCONH,double*dVectorUpSamH,double*dVectorUpSamL)
+{
+	int iUdx = threadIdx.x;
+	dVectorUpSamH[iUdx] = dVectorCONH[2 * iUdx + 1];
+	dVectorUpSamL[iUdx] = dVectorCONL[2 * iUdx + 1];
+}
+__device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx)
+{
+	int decExLen    = line + 4 * dbn - 2;//对称延拓长度
+	int decCONLen   = line + 2 * dbn - 1;//分解卷积长度
+	int decUpSamLen = (line + 2* dbn -1) / 2;//上采样长度
 
-	for(int i = 0; i < 4;++i)
+	double* dVectorEx 	  = new double[decExLen];
+	double* dVectorCONL   = new double[decCONLen];
+	double* dVectorCONH   = new double[decCONLen];
+	double* dVectorUpSamH = new double[decUpSamLen];
+	double* dVectorUpSamL = new double[decUpSamLen];
+	double* dVectorUpSam  = new double[2 * decUpSamLen];
+	decTransfromEx(d_a,line,idx,dbn,decExLen,dVectorEx);//延拓
+	for(int i = 0; i < decExLen;++i)
 	{
-		for(int j = 0; j < decCONLen; ++j)
-		{
-			printf("%f\t",dVectorCON[i * decCONLen + j]);
-		}
-		printf("\n");
+		printf("case:dVectorEx = %f\t",dVectorEx[i]);
 	}
-	return dVectorCON;
+	printf("\n");
+	decTransfromCON(dVectorEx,max,line,idx,decCONLen,dbn,dVectorCONL,dVectorCONH,decExLen);//卷积
+
+	cudaFree(dVectorEx);
+	printf("CON=\n");
+	printf("decCONLen = %d\n",decCONLen);
+	for(int i = 0; i < decCONLen;++i)
+	{
+		printf("dVectorCONL[%d] = %f\n  ",i,dVectorCONL[i]);
+		printf("dVectorCONH[%d] = %f\n  ",i,dVectorCONH[i]);
+	}
+	decUpSam<<<1,decUpSamLen>>>(dVectorCONL,dVectorCONH,dVectorUpSamH,dVectorUpSamL);
+
+	cudaFree(dVectorCONL);
+	cudaFree(dVectorCONH);
+	printf("UpSam=\n");
+	printf("decUpSamLen = %d\n",decUpSamLen);
+	for(int i = 0; i < decUpSamLen;++i)
+	{
+		printf("dVectorUpSamL[%d] = %f\n  ",i,dVectorUpSamL[i]);
+		printf("dVectorUpSamH[%d] = %f\n  ",i,dVectorUpSamH[i]);
+		dVectorUpSam[i] 			  = dVectorUpSamL[i];
+		dVectorUpSam[decUpSamLen + i] = dVectorUpSamH[i];
+	}
+	cudaFree(dVectorUpSamL);
+	cudaFree(dVectorUpSamH);
+	for(int i = 0; i < 2 * decUpSamLen;++i)
+	{
+		printf("dVectorUpSam[%d] = %f\n  ",i,dVectorUpSam[i]);
+	}
+
 }
