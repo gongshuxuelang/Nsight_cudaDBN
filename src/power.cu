@@ -1,6 +1,6 @@
 #include "head.h"
 
-int power(int base, int exponent)
+int H_power(int base, int exponent)
 {
 	int result = 1;	
 	if(exponent == 0)

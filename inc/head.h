@@ -66,7 +66,7 @@
     }while(0)
 
 ///全局函数//////////////////////////////////
-int power(int base, int exponent);//指数函数
+int H_power(int base, int exponent);//指数函数
 //void threadrFile1(RF prf,std::string str,std::string str1,int m,int n);
 //void threadrFile2(RF prf,std::string str,std::string str1,int m,int n);
 
