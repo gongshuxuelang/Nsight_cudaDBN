@@ -138,11 +138,11 @@ __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int
 		double* dVectorEx 	  = new double[power(2,DBN_N) * decExLen];
 		double* dVectorCON    = new double[power(2,DBN_N + 1) * decCONLen];		//  卷积和内存
 		double* dVectorUpSam;													//  上采样内存
-		if(DBN_N == dbn_n - 1)
-		{
-			d_line = decUpSamLen;
-
-		}
+//		if(DBN_N == dbn_n - 1)
+//		{
+//			d_line = decUpSamLen;
+//
+//		}
 		decTransfromEx(d_a,dVectorUpSam,line,idx,dbn,decExLen,dVectorEx,DBN_N);//延拓
 
 		for(int i = 0; i < decExLen;++i)
