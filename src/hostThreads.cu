@@ -8,8 +8,6 @@ void threadHostToDevice0(std::vector<double>& Hvec, std::vector<double>& maxVect
 	double* max_data;								//申请矩阵地址
 	double* maxBuffer = new double[8 * dbn];
 	double* buffer = new double[row * line]; 		//申请数组内存
-	thrust::host_vector<int> h_line;
-	thrust::device_vector<int> d_line;
 
 	if(!Hvec.empty())									//把vector的数组转换到普通数组
 	{
@@ -52,15 +50,13 @@ void threadHostToDevice0(std::vector<double>& Hvec, std::vector<double>& maxVect
         }
         std::cout<< std::endl;
     }
-//    cudaMalloc(&d_line,sizeof(int));
+
     cudaMalloc((void**)&max_data,sizeof(double) * 8 * dbn); //申请矩阵内存
 	cudaMalloc((void**)&d_a,sizeof(double) * row * line);	//申请显存大小
 	cudaMemcpy(d_a,buffer,sizeof(double) * row * line,cudaMemcpyHostToDevice);//内存数据导入到显存
 	cudaMemcpy(max_data,maxBuffer,sizeof(double) * 8 * dbn,cudaMemcpyHostToDevice);
 
 	GPU0<<<1,4>>>(d_a,max_data,row,line,dbn,dbn_n);					//启动核函数
-
-	h_line = d_line;
 
 
 	cudaFree(d_a);									//释放内存

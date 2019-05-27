@@ -1,5 +1,10 @@
 #include "head.h"
-
+/*
+ * 说明,GPU分出一个文件的向量,例如32个行向量,需要分出32个线程.
+ * 进入GPU中每一个线程又需要干不同的任务,一个行向量要进行DBN_N次分解和重构
+ * 每一次分解要比上一次的行向量多2倍,总体上就是2的DBN_N次幂的关系.
+ * 我需要的做的就是理清楚一个行向量做出2维数据,用并行算法写出代码.避免串行代码的问题,既然使用了GPU那就不要浪费GPU的计算性能.
+ * */
 
 //接收的数据为32*7681,32行互不相干。开32个线程来处理这个矩阵。d_data是数据row是行，line是列，DBN_N是分解层数
 __global__ void GPU0(double* d_a,double* max,int row,int line,int dbn,int dbn_n)
@@ -56,6 +61,21 @@ __device__ void printData(double* buffer,int row,int line)
         printf("\n");
     }
 }
+// 这个函数用于开线程延拓线程开一组的就可以其他组的用line来区分
+__global__ void decEx(double* dVectorUpSam,int line,int dbn,double* dVectorEx)
+{
+	int decExidx = threadIdx.x;//这个线程号最多只有一组的线程号
+
+	for(int i = 0; i < 2 * dbn - 1; ++i)
+	{
+		dVectorEx[decExidx  * (line + 4 * dbn - 2) + i] 					 = dVectorUpSam[decExidx * line + 2 * dbn -2 - i];
+		dVectorEx[decExidx  * (line + 4 * dbn - 2) + 2 * dbn + line - 1 + i] = dVectorUpSam[decExidx * line + line -1 - i];
+	}
+	for(int i = 0; i < line; ++i)
+	{
+		dVectorEx[decExidx  * (line + 4 * dbn - 2) + 2 * dbn - 1 + i] = dVectorUpSam[decExidx  * line + i];
+	}
+}
 __device__ void decTransfromEx(double* d_data,double* dVectorUpSam,int line,int idx,int dbn,int decExLen,double* dVectorEx,int DBN_N)
 {
 	if(DBN_N == 0)
@@ -70,62 +90,36 @@ __device__ void decTransfromEx(double* d_data,double* dVectorUpSam,int line,int 
 			dVectorEx[2 * dbn - 1 + i] = d_data[idx * line + i];
 		}
 	}else{
-		for(int i = 0; i < 2 * dbn - 1; ++i)
-		{
-			dVectorEx[i] 					  = dVectorUpSam[idx * line + 2 * dbn -2 - i];
-			dVectorEx[2 * dbn + line - 1 + i] = dVectorUpSam[idx * line + line -1 - i];
-		}
-		for(int i = 0; i < line; ++i)
-		{
-			dVectorEx[2 * dbn - 1 + i] = dVectorUpSam[idx * line + i];
-		}
+		decEx<<<1,power(2,DBN_N)>>>(dVectorUpSam,line,dbn,dVectorEx);
 	}
-
-	//打印延拓结果
-	for(int i = 0; i < decExLen; ++i)
-	{
-		printf("dVectorEx = %f ",dVectorEx[i]);
-	}
-	printf("\n");
 	return ;
 }
-__global__ void dataCON(double* dVectorEx,double* sdecMaxL,double* sdecMaxH,int dbn,int decCONLen,double* dVectorCON,int idx,int decExLen,int DBN_N)
+__global__ void dataCON(double* dVectorEx,double* sdecMaxL,double* sdecMaxH,int dbn,int decCONLen,double* dVectorCON,int decCONidx,int decExLen,int DBN_N)
 {
-	double tempL = 0;
-	double tempH = 0;
 	int iidx = threadIdx.x;
+
 	for(int i = 0; i < 2* dbn; ++i)
 	{
-		tempL += dVectorEx[iidx + i] * sdecMaxL[i];
-		tempH += dVectorEx[iidx + i] * sdecMaxH[i];
+		dVectorCON[2 * decCONidx * decCONLen + iidx] += dVectorEx[decCONidx * decExLen + iidx + i] * sdecMaxL[i];
+		dVectorCON[(2 * decCONidx + 1) * decCONLen + iidx] += dVectorEx[decCONidx * decExLen + iidx + i] * sdecMaxH[i];
 	}
-	dVectorCON[iidx] = tempL;
-	dVectorCON[iidx + decCONLen] = tempH;
 }
-__device__ void decTransfromCON(double* dVectorEx,double* max,int line,int idx,int decCONLen,int dbn,double* dVectorCON,int decExLen,int DBN_N)
+__global__ void decTransfromCON(double* dVectorEx,double* sdecMaxL,double*sdecMaxH,int decCONLen,int dbn,double* dVectorCON,int decExLen,int DBN_N)
 {
-	double* sdecMaxL= new double[2 * dbn];
-	double* sdecMaxH= new double[2 * dbn];
-
-	for(int i = 0; i < 2 * dbn; ++i)
-	{
-		sdecMaxL[i] = max[0 * 2 * dbn + i];
-		sdecMaxH[i] = max[1 * 2 * dbn + i];
-		printf("sdecMaxL = %f\t",sdecMaxL[i]);
-		printf("\n");
-		printf("sdecMaxH = %f\t",sdecMaxH[i]);
-		printf("\n");
-	}
-	dataCON<<<1,decCONLen>>>(dVectorEx,sdecMaxL,sdecMaxH,dbn,decCONLen,dVectorCON,idx,decExLen,DBN_N);
+	int decCONidx = threadIdx.x;
+	dataCON<<<1,decCONLen>>>(dVectorEx,sdecMaxL,sdecMaxH,dbn,decCONLen,dVectorCON,decCONidx,decExLen,DBN_N);
 	__syncthreads();
-	cudaFree(sdecMaxL);
-	cudaFree(sdecMaxH);
 }
-__global__ void decUpSam(double* dVectorCON,double*dVectorUpSam,int decCONLen,int decUpSamLen,int DBN_N)
+__global__ void decUpSam(double* dVectorCON,double*dVectorUpSam,int decCONLen,int decUpSamLen,int DBN_N,int decUpidx)
 {
-	int iUdx = threadIdx.x;
-	dVectorUpSam[iUdx] 				 = dVectorCON[2 * iUdx + 1];
-	dVectorUpSam[decUpSamLen + iUdx] = dVectorCON[decCONLen + 2 * iUdx + 1];
+	int iUpdx = threadIdx.x;
+	dVectorUpSam[decUpSamLen * decUpidx + iUpdx] = dVectorCON[decCONLen * decUpidx + 2 * iUpdx + 1];
+}
+__global__ void decTransfromUpSam(double* dVectorCON,double*dVectorUpSam,int decCONLen,int decUpSamLen,int DBN_N)
+{
+	int decUpidx = threadIdx.x;
+	decUpSam<<<1,decUpSamLen>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N,decUpidx);
+	__syncthreads();
 }
 __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int dbn_n)
 {
@@ -135,44 +129,47 @@ __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int
 		int decCONLen   = line + 2 * dbn - 1;//分解卷积长度
 		int decUpSamLen = (line + 2* dbn -1) / 2;//上采样长度
 
-		double* dVectorEx 	  = new double[power(2,DBN_N) * decExLen];
-		double* dVectorCON    = new double[power(2,DBN_N + 1) * decCONLen];		//  卷积和内存
+		double* dVectorEx 	  = new double[power(2,DBN_N) * decExLen]();
+		double* dVectorCON    = new double[power(2,DBN_N + 1) * decCONLen]();		//  卷积和内存
 		double* dVectorUpSam;													//  上采样内存
-//		if(DBN_N == dbn_n - 1)
-//		{
-//			d_line = decUpSamLen;
-//
-//		}
+
 		decTransfromEx(d_a,dVectorUpSam,line,idx,dbn,decExLen,dVectorEx,DBN_N);//延拓
 
-		for(int i = 0; i < decExLen;++i)
+		printf("decExLen = %d\n",decExLen);
+		for(int i = 0; i < power(2,DBN_N) * decExLen;++i)
 		{
-			printf("case:dVectorEx = %f\t",dVectorEx[i]);
+			printf("dVectorEx[%d] = %f\n",i,dVectorEx[i]);
 		}
 		printf("\n");
-		decTransfromCON(dVectorEx,max,line,idx,decCONLen,dbn,dVectorCON,decExLen,DBN_N);//卷积
+
+		double* sdecMaxL= new double[2 * dbn]();
+		double* sdecMaxH= new double[2 * dbn]();
+
+		for(int i = 0; i < 2 * dbn; ++i)
+		{
+			sdecMaxL[i] = max[0 * 2 * dbn + i];
+			sdecMaxH[i] = max[1 * 2 * dbn + i];
+		}
+		decTransfromCON<<<1,power(2,DBN_N)>>>(dVectorEx,sdecMaxL,sdecMaxH,decCONLen,dbn,dVectorCON,decExLen,DBN_N);//卷积
 		__syncthreads();
 		cudaFree(dVectorEx);
-		printf("CON=\n");
+
 		printf("decCONLen = %d\n",decCONLen);
-		for(int i = 0; i < decCONLen;++i)
+		for(int i = 0; i < power(2,DBN_N + 1) * decCONLen;++i)
 		{
-			printf("dVectorCONL[%d] = %f\n  ",i,dVectorCON[i]);
-			printf("dVectorCONH[%d] = %f\n  ",i,dVectorCON[i + decCONLen]);
+			printf("dVectorCON[%d] = %f\n",i,dVectorCON[i]);
 		}
-		dVectorUpSam = new double[power(2,DBN_N + 1) * decUpSamLen];
-		decUpSam<<<1,decUpSamLen>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N);
+		dVectorUpSam = new double[power(2,DBN_N + 1) * decUpSamLen]();
+		decTransfromUpSam<<<1,power(2,DBN_N + 1)>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N);
+		__syncthreads();
 		cudaFree(dVectorCON);
-		printf("UpSam=\n");
+		cudaFree(sdecMaxL);
+		cudaFree(sdecMaxH);
 		printf("decUpSamLen = %d\n",decUpSamLen);
-		for(int i = 0; i < decUpSamLen;++i)
+		for(int i = 0; i < power(2,DBN_N + 1) * decUpSamLen;++i)
 		{
-			printf("dVectorUpSamL[%d] = %f\n  ",i,dVectorUpSam[i]);
-			printf("dVectorUpSamH[%d] = %f\n  ",i,dVectorUpSam[i + decUpSamLen]);
-		}
-		for(int i = 0; i < 2 * decUpSamLen;++i)
-		{
-			printf("dVectorUpSam[%d] = %f\n  ",i,dVectorUpSam[i]);
+			printf("dVectorUpSam[%d] = %f\n",i,dVectorUpSam[i]);
+
 		}
 		//cudaFree(dVectorUpSam);
 		//更新系数,进行下一层分解
