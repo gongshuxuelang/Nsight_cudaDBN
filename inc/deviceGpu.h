@@ -16,7 +16,11 @@ __global__ void decTransfromUpSam(double* dVectorCON,double*dVectorUpSam,int dec
 __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int dbn_n,double*& refdata,int& refline);
 
 /*重构函数*/
-__device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n);
+__device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n,int Begin,int End);
 __global__ void refChooseSignal(double* refdata,double* max,int refline,int dbn,int dbn_n);
+__global__ void refDSam(double* refdata,double* refTransfromDsam,double* refTransfromSignal,int refDsamLen,int Begin,int DBN_N,int refline,int refDsamidx);
+__global__ void refSignalDSam(double* refdata,double* refTransfromDsam,double* refTransfromSignal,int refDsamLen,int Begin,int DBN_N,int refline);
+__device__ void refEx(double* refTransfromDsam,double* refTransfromEx,int dbn,int refDsamLen,int refExLen,int refExidx);
+__global__ void refSignalEx(double* refTransfromDsam,double* refTransfromEx,int dbn,int refDsamLen,int refExLen);
 
 #endif

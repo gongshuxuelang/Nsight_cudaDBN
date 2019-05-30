@@ -37,7 +37,8 @@ __global__ void GPU0(double* d_a,double* max,int row,int line,int dbn,int dbn_n)
 		{
 			printf("refdata[%d] = %f\n",i,refdata[i]);
 		}
-		ref(refdata,max,refline,dbn,dbn_n);
+		refChooseSignal<<<1,4>>>(refdata,max,refline,dbn,dbn_n);
+		__syncthreads();
 		break;
 	case 1:
 
@@ -54,9 +55,119 @@ __global__ void GPU0(double* d_a,double* max,int row,int line,int dbn,int dbn_n)
 	}
 }
 
-__device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n)
+__device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n,int Begin,int End)
 {
-	refChooseSignal<<<1,4>>>(refdata,max,refline,dbn,dbn_n);
+	double* refMaxL= new double[2 * dbn]();
+	double* refMaxH= new double[2 * dbn]();
+	for(int i = 0; i < 2 * dbn; ++i)
+	{
+		refMaxL[i] = max[2 * 2 * dbn + i];
+		refMaxH[i] = max[3 * 2 * dbn + i];
+		printf("refMaxL[%d] = %f\n",i,refMaxL[i]);
+		printf("refMaxH[%d] = %f\n",i,refMaxH[i]);
+	}
+
+	for(int DBN_N = 0; DBN_N < 1; ++DBN_N)
+	{
+		int refDsamLen   = 2 * refline + 1;				//重构下采样长度
+		int refExLen     = 2 * refline + 4 * dbn - 1;	//重构对称延拓长度
+		int refConLen    = 2 * refline + 2 * dbn;		//重构卷积长度
+		int refSingalLen = 2 * refline - 2 * dbn + 2;	//重构信号长度
+
+		double* refTransfromDsam = new double[(End - Begin + 1) * refDsamLen]();
+		double* refTransfromEx   = new double[(End - Begin + 1) * refExLen]();
+		double* refTransfromCon  = new double[(End / 2 + Begin / 2 + 1) * refConLen]();
+		double* refTransfromSignal;
+
+
+		refSignalDSam<<<1,End - Begin + 1>>>(refdata,refTransfromDsam,refTransfromSignal,refDsamLen,Begin,DBN_N,refline);
+		__syncthreads();
+		printf("refDsamLen = %d\n",refDsamLen);
+		for(int i = 0; i < (End - Begin + 1) * refDsamLen; ++i)
+		{
+			printf("refTransfromDsam[%d] = %f\n",i,refTransfromDsam[i]);
+		}
+		printf("refExLen = %d\n",refExLen);
+		refSignalEx<<<1,End - Begin + 1>>>(refTransfromDsam,refTransfromEx,dbn,refDsamLen,refExLen);
+		__syncthreads();
+		for(int i = 0; i < (End - Begin + 1) * refExLen; ++i)
+		{
+			printf("refTransfromEx[%d] = %f\n",i,refTransfromEx[i]);
+		}
+
+	}
+	delete[] refMaxL;
+	delete[] refMaxH;
+}
+
+__global__ void refCon(double* refTransfromEx,double* refTransfromCon,double* refMaxL,double* refMaxH,int refConLen,int refExLen,int dbn,int Begin,int End)
+{
+	int refConidx = threadIdx.x;
+
+	for(int i = 0; i < 2* dbn; ++i)
+	{
+
+
+	}
+}
+__device__ void refSignalCon(double* refTransfromEx,double* refTransfromCon,double* refMaxL,double* refMaxH,int refConLen,int refExLen,int dbn,int Begin,int End)
+{
+	if(Begin % 2 == 0)
+	{
+		if(End % 2 == 0)//第一种情况 Begin和End都是偶数
+		{
+
+		}else{//第二种情况Begin是偶数,End是奇数
+
+
+		}
+
+	}else{
+		if(End % 2 == 0)//第三种情况Begin是奇数,End是偶数
+		{
+
+		}else{//第四种情况,Begin和End都是奇数
+
+		}
+	}
+}
+
+
+__device__ void refEx(double* refTransfromDsam,double* refTransfromEx,int dbn,int refDsamLen,int refExLen,int refExidx)
+{
+	for(int i = 0; i < 2 * dbn - 1; ++i)
+	{
+		refTransfromEx[refExidx * refExLen + i] 				       = refTransfromDsam[refExidx * refDsamLen + 2 * dbn -2 - i];
+		refTransfromEx[refExidx * refExLen + refDsamLen + 2 * dbn -1 + i] = refTransfromDsam[refExidx * refDsamLen + refDsamLen -1 - i];
+	}
+	for(int i = 0; i < refDsamLen; ++i)
+	{
+		refTransfromEx[refExidx * refExLen + 2 * dbn - 1 + i] = refTransfromDsam[refExidx * refDsamLen + i];
+	}
+}
+
+__global__ void refSignalEx(double* refTransfromDsam,double* refTransfromEx,int dbn,int refDsamLen,int refExLen)
+{
+	int refExidx = threadIdx.x;
+	refEx(refTransfromDsam,refTransfromEx,dbn,refDsamLen,refExLen,refExidx);
+}
+
+__global__ void refDSam(double* refdata,double* refTransfromDsam,double* refTransfromSignal,int refDsamLen,int Begin,int DBN_N,int refline,int refDsamidx)
+{
+	int refDidx = threadIdx.x;
+	if(DBN_N == 0)
+	{
+		refTransfromDsam[refDsamidx * refDsamLen + 2 * refDidx + 1] = refdata[(refDsamidx + Begin) * refline + refDidx];
+	}else{
+		refTransfromDsam[refDsamidx * refDsamLen + 2 * refDidx + 1] = refTransfromSignal[refDsamidx * refDsamLen + refDidx];
+	}
+}
+
+__global__ void refSignalDSam(double* refdata,double* refTransfromDsam,double* refTransfromSignal,int refDsamLen,int Begin,int DBN_N,int refline)
+{
+	int refDsamidx = threadIdx.x;
+	refDSam<<<1,refline>>>(refdata,refTransfromDsam,refTransfromSignal,refDsamLen,Begin,DBN_N,refline,refDsamidx);
+	__syncthreads();
 }
 
 /*
@@ -71,24 +182,58 @@ __global__ void refChooseSignal(double* refdata,double* max,int refline,int dbn,
 	switch(refchSigidx)
 	{
 	case 0:
-		printf("refChooseSignal 0 = %d\n",refchSigidx);
+		/*
+		 * Alpha波的起始频率为7.81Hz终止信号为13.28Hz
+		 *
+		 * */
+		printf("选择Alpha波.\n");
+//		int AlphaBegin = static_cast<int>(floor(7.81 * power(2,dbn_n) / 64));
+//		int AlphaEnd   = static_cast<int>(floor(13.28 * power(2,dbn_n) / 64));
+		int AlphaBegin = 1;
+		int AlphaEnd = 5;
+		printf("AlphaBegin = %d\n",AlphaBegin);
+		printf("AlphaEnd = %d\n",AlphaEnd);
+		ref(refdata,max,refline,dbn,dbn_n,AlphaBegin,AlphaEnd);
+
+
 		break;
 	case 1:
-		printf("refChooseSignal 1 = %d\n",refchSigidx);
+		/*
+		 * Beta波的起始频率为13.28Hz终止信号为30.47Hz
+		 *
+		 * */
+		printf("选择Beta波.\n");
+		int BetaBegin = static_cast<int>(floor(13.28 * power(2,dbn_n) / 64));
+		int BetaEnd   = static_cast<int>(floor(30.47 * power(2,dbn_n) / 64));
+		printf("BetaBegin = %d\n",BetaBegin);
+		printf("BetaEnd = %d\n",BetaEnd);
 		break;
 	case 2:
-		printf("refChooseSignal 2 = %d\n",refchSigidx);
+		/*
+		 * Delta波的起始频率为0.78Hz终止信号为3.91Hz
+		 *
+		 * */
+		printf("选择Delta波.\n");
+		int DeltaBegin = static_cast<int>(floor(0.78 * power(2,dbn_n) / 64));
+		int DeltaEnd   = static_cast<int>(floor(3.91 * power(2,dbn_n) / 64));
+		printf("DeltaBegin = %d\n",DeltaBegin);
+		printf("DeltaEnd = %d\n",DeltaEnd);
 		break;
 	case 3:
-		printf("refChooseSignal 3 = %d\n",refchSigidx);
+		/*
+		 *Theta波的起始频率为3.91Hz终止信号为7.81Hz
+		 *
+		 * */
+		printf("选择Theta波.\n");
+		int ThetaBegin = static_cast<int>(floor(3.91 * power(2,dbn_n) / 64));
+		int ThetaEnd   = static_cast<int>(floor(7.81 * power(2,dbn_n) / 64));
+		printf("ThetaBegin = %d\n",ThetaBegin);
+		printf("ThetaEnd = %d\n",ThetaEnd);
 		break;
 	}
 
 
 }
-
-
-
 
 __global__ void GPU1(double* d_a,int row,int line,int dbn,int dbn_n)
 {
@@ -188,6 +333,15 @@ __global__ void decTransfromUpSam(double* dVectorCON,double*dVectorUpSam,int dec
 __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int dbn_n,double*& refdata,int& refline)
 {
 	/*分解过程*/
+	double* sdecMaxL = new double[2 * dbn]();
+	double* sdecMaxH = new double[2 * dbn]();
+	for(int i = 0; i < 2 * dbn; ++i)
+	{
+		sdecMaxL[i] = max[0 * 2 * dbn + i];
+		sdecMaxH[i] = max[1 * 2 * dbn + i];
+		printf("sdecMaxL[%d] = %f\n",i,sdecMaxL[i]);
+		printf("sdecMaxH[%d] = %f\n",i,sdecMaxH[i]);
+	}
 	for(int DBN_N = 0; DBN_N < dbn_n; ++DBN_N)
 	{
 		int decExLen    = line + 4 * dbn - 2;//对称延拓长度
@@ -196,7 +350,9 @@ __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int
 
 		double* dVectorEx 	  = new double[power(2,DBN_N) * decExLen]();
 		double* dVectorCON    = new double[power(2,DBN_N + 1) * decCONLen]();		//  卷积和内存
-		double* dVectorUpSam;													//  上采样内存
+		double* dVectorUpSam; 													//  上采样内存
+
+
 
 		decTransfromEx(d_a,dVectorUpSam,line,idx,dbn,decExLen,dVectorEx,DBN_N);//延拓
 
@@ -207,29 +363,22 @@ __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int
 		}
 		printf("\n");
 
-		double* sdecMaxL= new double[2 * dbn]();
-		double* sdecMaxH= new double[2 * dbn]();
 
-		for(int i = 0; i < 2 * dbn; ++i)
-		{
-			sdecMaxL[i] = max[0 * 2 * dbn + i];
-			sdecMaxH[i] = max[1 * 2 * dbn + i];
-		}
 		decTransfromCON<<<1,power(2,DBN_N)>>>(dVectorEx,sdecMaxL,sdecMaxH,decCONLen,dbn,dVectorCON,decExLen,DBN_N);//卷积
 		__syncthreads();
-		cudaFree(dVectorEx);
+		delete[]dVectorEx;
 
 		printf("decCONLen = %d\n",decCONLen);
 		for(int i = 0; i < power(2,DBN_N + 1) * decCONLen;++i)
 		{
 			printf("dVectorCON[%d] = %f\n",i,dVectorCON[i]);
 		}
+		//只能在这里申请内存,在开头申请内存第二次循环数据为空了.
 		dVectorUpSam = new double[power(2,DBN_N + 1) * decUpSamLen]();
 		decTransfromUpSam<<<1,power(2,DBN_N + 1)>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N);
 		__syncthreads();
-		cudaFree(dVectorCON);
-		cudaFree(sdecMaxL);
-		cudaFree(sdecMaxH);
+		delete[]dVectorCON;
+
 		printf("decUpSamLen = %d\n",decUpSamLen);
 		for(int i = 0; i < power(2,DBN_N + 1) * decUpSamLen;++i)
 		{
@@ -242,9 +391,11 @@ __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int
 			refline = line;
 			refdata = new double[power(2,dbn_n)*refline];
 			refdata = dVectorUpSam;
-			cudaFree(dVectorUpSam);
+			delete[]dVectorUpSam;
 		}
 	}
+	delete[]sdecMaxL;
+	delete[]sdecMaxH;
 }
 
 
