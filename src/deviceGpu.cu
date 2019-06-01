@@ -76,9 +76,14 @@ __device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n,in
 
 		double* refTransfromDsam = new double[(End - Begin + 1) * refDsamLen]();
 		double* refTransfromEx   = new double[(End - Begin + 1) * refExLen]();
-		double* refTransfromCon  = new double[(End / 2 + Begin / 2 + 1) * refConLen]();
+		double* refTransfromCon  = new double[(End / 2 - Begin / 2 + 1) * refConLen]();
 		double* refTransfromSignal;
 
+		printf("refline = %d\n",refline);
+		for(int i = 0; i < power(2,dbn_n) * refline; ++i)
+		{
+			printf("refdata[%d] = %f\n",i,refdata[i]);
+		}
 
 		refSignalDSam<<<1,End - Begin + 1>>>(refdata,refTransfromDsam,refTransfromSignal,refDsamLen,Begin,DBN_N,refline);
 		__syncthreads();
@@ -94,44 +99,113 @@ __device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n,in
 		{
 			printf("refTransfromEx[%d] = %f\n",i,refTransfromEx[i]);
 		}
+		delete[] refTransfromDsam;
+		//卷积区分高频低频卷积
+		//测试卷积效果
 
+		printf("Begin = %d\n",Begin);
+		printf("End = %d\n",End);
+		if(Begin % 2 == 0)
+		{
+			if(End % 2 == 0)//第一种情况 Begin和End都是偶数
+			{
+				printf("执行第一种情况\n");
+				refSignalCon<<<1,End / 2 - Begin / 2>>>(refTransfromEx,refTransfromCon,refMaxL,refMaxH,refConLen,refExLen,dbn,Begin,End,0);
+				refConEnd<<<1,refConLen>>>(refTransfromEx,refTransfromCon,refMaxL,refConLen,refExLen,dbn,Begin,End);//计算End数据
+			}else{//第二种情况Begin是偶数,End是奇数
+				printf("执行第二种情况\n");
+				refSignalCon<<<1,End / 2 - Begin / 2 + 1>>>(refTransfromEx,refTransfromCon,refMaxL,refMaxH,refConLen,refExLen,dbn,Begin,End,0);
+			}
+		}else{
+			if(End % 2 == 0)//第三种情况Begin是奇数,End是偶数
+			{
+				printf("执行第三种情况\n");
+				refConBegin<<<1,refConLen>>>(refTransfromEx,refTransfromCon,refMaxH,dbn);//计算Begin数据
+				refSignalCon<<<1,End / 2 - Begin / 2 - 1>>>(refTransfromEx,refTransfromCon,refMaxL,refMaxH,refConLen,refExLen,dbn,Begin,End,1);
+				refConEnd<<<1,refConLen>>>(refTransfromEx,refTransfromCon,refMaxL,refConLen,refExLen,dbn,Begin,End);//计算End数据
+			}else{//第四种情况,Begin和End都是奇数
+				printf("执行第四种情况\n");
+				refConBegin<<<1,refConLen>>>(refTransfromEx,refTransfromCon,refMaxH,dbn);//计算Begin数据
+				refSignalCon<<<1,End / 2 - Begin / 2>>>(refTransfromEx,refTransfromCon,refMaxL,refMaxH,refConLen,refExLen,dbn,Begin,End,1);
+			}
+		}
+		delete[] refTransfromEx;
+		//打印卷积结果
+		printf("refTransfromCon = \n");
+		printf("refConLen = %d\n",refConLen);
+		for(int i = 0; i < (End / 2 - Begin / 2 + 1) * refConLen; ++i)
+		{
+			printf("refTransfromCon[%d] = %f\n",i,refTransfromCon[i]);
+		}
+		//信号选取
+		refTransfromSignal = new double[(End / 2 - Begin / 2 + 1) * refSingalLen]();
+		refSignal<<<1,End / 2 - Begin / 2 + 1>>>(refTransfromCon,refTransfromSignal,refConLen,refSingalLen,dbn);
+		delete[] refTransfromCon;
+
+		printf("refTransfromSignal = \n");
+		printf("refSingalLen = %d\n",refSingalLen);
+		for(int i = 0; i < (End / 2 - Begin / 2 + 1) * refSingalLen; ++i)
+		{
+			printf("refTransfromSignal[%d] = %f\n",i,refTransfromSignal[i]);
+		}
+		Begin = (int)Begin / 2;
+		End   = (int)End / 2;
+		printf("Begin = %d\n",Begin);
+		printf("End = %d\n",End);
 	}
 	delete[] refMaxL;
 	delete[] refMaxH;
 }
 
-__global__ void refCon(double* refTransfromEx,double* refTransfromCon,double* refMaxL,double* refMaxH,int refConLen,int refExLen,int dbn,int Begin,int End)
+__global__ void refSignal(double* refTransfromCon,double*refTransfromSignal,int refConLen,int refSingalLen,int dbn)
+{
+	int refSignalIdx = threadIdx.x;
+	refSig<<<1,refSingalLen>>>(refTransfromCon,refTransfromSignal,refConLen,refSingalLen,dbn,refSignalIdx);
+
+}
+
+__global__ void refSig(double* refTransfromCon,double*refTransfromSignal,int refConLen,int refSingalLen,int dbn,int refSignalIdx)
+{
+	int refSinidx = threadIdx.x;
+	refTransfromSignal[refSignalIdx * refSingalLen + refSinidx] = refTransfromCon[refSignalIdx * refConLen + 2 * dbn - 2 + refSinidx];
+}
+
+//flag是为了保证Begin和之后的不会重复
+__global__ void refConBegin(double* refTransfromEx,double* refTransfromCon,double* refMaxH,int dbn)
+{
+	int refConidx = threadIdx.x;
+	for(int i = 0; i < 2* dbn; ++i)
+	{
+		refTransfromCon[refConidx] += refTransfromEx[refConidx + i] * refMaxH[i];
+	}
+}
+
+__global__ void refConEnd(double* refTransfromEx,double* refTransfromCon,double* refMaxL,int refConLen,int refExLen,int dbn,int Begin,int End)
+{
+	int refConidx = threadIdx.x;
+	for(int i = 0; i < 2* dbn; ++i)
+	{
+		refTransfromCon[(End / 2 - Begin / 2) * refConLen + refConidx] += refTransfromEx[(End - Begin) * refExLen + refConidx + i] * refMaxL[i];
+	}
+}
+
+__global__ void refCon(double* refTransfromEx,double* refTransfromCon,double* refMaxL,double* refMaxH,int refConLen,int refExLen,int dbn,int refConBlockIdx,int flag)
 {
 	int refConidx = threadIdx.x;
 
 	for(int i = 0; i < 2* dbn; ++i)
 	{
-
-
+		refTransfromCon[(refConBlockIdx + flag) * refConLen + refConidx] += refTransfromEx[2 * refConBlockIdx * refExLen + flag  * refExLen + refConidx + i] * refMaxL[i]
+		                                                        + refTransfromEx[(2 * refConBlockIdx + 1) * refExLen  + flag * refExLen + refConidx + i] * refMaxH[i];
 	}
 }
-__device__ void refSignalCon(double* refTransfromEx,double* refTransfromCon,double* refMaxL,double* refMaxH,int refConLen,int refExLen,int dbn,int Begin,int End)
+
+__global__ void refSignalCon(double* refTransfromEx,double* refTransfromCon,double* refMaxL,double* refMaxH,int refConLen,int refExLen,int dbn,int Begin,int End,int flag)
 {
-	if(Begin % 2 == 0)
-	{
-		if(End % 2 == 0)//第一种情况 Begin和End都是偶数
-		{
+	int refConBlockIdx = threadIdx.x;
 
-		}else{//第二种情况Begin是偶数,End是奇数
-
-
-		}
-
-	}else{
-		if(End % 2 == 0)//第三种情况Begin是奇数,End是偶数
-		{
-
-		}else{//第四种情况,Begin和End都是奇数
-
-		}
-	}
+	refCon<<<1,refConLen>>>(refTransfromEx,refTransfromCon,refMaxL,refMaxH,refConLen,refExLen,dbn,refConBlockIdx,flag);
 }
-
 
 __device__ void refEx(double* refTransfromDsam,double* refTransfromEx,int dbn,int refDsamLen,int refExLen,int refExidx)
 {
@@ -190,7 +264,7 @@ __global__ void refChooseSignal(double* refdata,double* max,int refline,int dbn,
 //		int AlphaBegin = static_cast<int>(floor(7.81 * power(2,dbn_n) / 64));
 //		int AlphaEnd   = static_cast<int>(floor(13.28 * power(2,dbn_n) / 64));
 		int AlphaBegin = 1;
-		int AlphaEnd = 5;
+		int AlphaEnd = 4;
 		printf("AlphaBegin = %d\n",AlphaBegin);
 		printf("AlphaEnd = %d\n",AlphaEnd);
 		ref(refdata,max,refline,dbn,dbn_n,AlphaBegin,AlphaEnd);
