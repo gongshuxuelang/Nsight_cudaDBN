@@ -1,4 +1,6 @@
 #include "head.h"
+
+
 /*
     本次函数为读文件函数。
     读取文件函数有三个参数mode，这个参数的意义为读取哪一个文件
@@ -48,9 +50,9 @@ bool rwDate_dec::ReadDate()
         //测试点
         std::cout << "file_temporary = " << file_temporary << std::endl;
         double rtdata;
-//        std::ifstream ifstr_data(file_temporary);	//读文件
+        std::ifstream ifstr_data(file_temporary);	//读文件
         //测试文件
-        std::ifstream ifstr_data("/home/lcx/code/data/测试数据/1.txt");
+//        std::ifstream ifstr_data("/home/lcx/code/data/测试数据/1.txt");
         for(std::vector<double>::size_type i = 0; i < data_row * data_line; ++i)//  把文件读到内存中
         {
         	ifstr_data >> rtdata;

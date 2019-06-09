@@ -1,5 +1,5 @@
 ################################################################################
-# 自动生成的文件。不要编辑！
+# Automatically-generated file. Do not edit!
 ################################################################################
 
 -include ../makefile.init
@@ -51,18 +51,18 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 
-# 所有目标
+# All Target
 all: cudaDBN
 
-# 工具调用
+# Tool invocations
 cudaDBN: $(OBJS) $(USER_OBJS)
-	@echo '正在构建目标： $@'
-	@echo '正在调用： NVCC Linker'
+	@echo 'Building target: $@'
+	@echo 'Invoking: NVCC Linker'
 	/usr/local/cuda-10.0/bin/nvcc --cudart static --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -m64 -link -o  "cudaDBN" $(OBJS) $(USER_OBJS) $(LIBS)
-	@echo '已结束构建目标： $@'
+	@echo 'Finished building target: $@'
 	@echo ' '
 
-# 其他目标
+# Other Targets
 clean:
 	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CU_DEPS)$(CPP_DEPS)$(C_DEPS) cudaDBN
 	-@echo ' '

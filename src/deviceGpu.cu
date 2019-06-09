@@ -20,37 +20,218 @@ __device__ int power(int base, int exponent)
 	return result;
 }
 //接收的数据为32*7681,32行互不相干。开32个线程来处理这个矩阵。d_data是数据row是行，line是列，DBN_N是分解层数
-__global__ void GPU0(double* d_a,double* max,int row,int line,int dbn,int dbn_n)
+__global__ void GPU0(double* DeviceDecDataFinsh,double* d_a,double* max,int row,int line,int dbn,int dbn_n,int finshline)
 {
 	int idx = threadIdx.x;
+	printf("idx = %d\n",idx);
+	double* refdata = new double[row * power(2,dbn_n) * finshline]();
 	switch(idx)
 	{
 	case 0:
-		int refline = 0;
-		double* refdata;
-		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata,refline);
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
 		__syncthreads();
-		/*重构部分*/
-		printf("refline = %d\n",refline);
-		printf("power(2,dbn_n) * refline = %d\n",power(2,dbn_n) * refline);
-		for(int i = 0; i < power(2,dbn_n) * refline;++i)
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		for(int i = 0; i < finshline; ++i)
 		{
-			printf("refdata[%d] = %f\n",i,refdata[i]);
+			printf("refdata[%d] =  %0.16f\n",i,refdata[i]);
+			printf("DeviceDecDataFinsh[%d] =  %0.16f\n",i,DeviceDecDataFinsh[i]);
 		}
-		refChooseSignal<<<1,4>>>(refdata,max,refline,dbn,dbn_n);
-		__syncthreads();
+//		/*重构部分*/
+//		printf("refline = %d\n",refline);
+//		printf("power(2,dbn_n) * refline = %d\n",power(2,dbn_n) * refline);
+//		for(int i = 0; i < power(2,dbn_n) * refline;++i)
+//		{
+//			printf("refdata[%d] = %f\n",i,refdata[i]);
+//		}
+//
+//		refChooseSignal<<<1,4>>>(refdata,max,refline,dbn,dbn_n);
+//		__syncthreads();
 		break;
 	case 1:
-
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
 		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
 		break;
 	case 2:
-
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
 		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
 		break;
 	case 3:
-
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
 		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 4:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 5:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 6:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 7:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 8:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 9:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 10:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 11:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 12:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 13:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 14:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 15:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 16:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 17:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 18:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 19:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 20:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 21:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 22:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 23:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 24:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 25:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 26:
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 27:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 28:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 29:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 30:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
+		break;
+	case 31:
+		printf("idx = %d\n",idx);
+		dec(d_a,max,row,line,dbn,idx,dbn_n,refdata);
+		__syncthreads();
+		memcpy(DeviceDecDataFinsh + finshline * power(2,dbn_n) * idx,refdata,sizeof(double) * finshline * power(2,dbn_n));
 		break;
 	}
 }
@@ -66,9 +247,19 @@ __device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n,in
 		printf("refMaxL[%d] = %f\n",i,refMaxL[i]);
 		printf("refMaxH[%d] = %f\n",i,refMaxH[i]);
 	}
-
+	printf("refline = %d\n",refline);
+	for(int i = 0; i < 24; ++i)
+	{
+		printf("refdata[%d] = %f\n",i,refdata[i]);
+	}
 	for(int DBN_N = 0; DBN_N < 1; ++DBN_N)
 	{
+		printf("refline = %d\n",refline);
+		for(int i = 0; i < 24; ++i)
+		{
+			printf("refdata[%d] = %f\n",i,refdata[i]);
+		}
+
 		int refDsamLen   = 2 * refline + 1;				//重构下采样长度
 		int refExLen     = 2 * refline + 4 * dbn - 1;	//重构对称延拓长度
 		int refConLen    = 2 * refline + 2 * dbn;		//重构卷积长度
@@ -79,11 +270,6 @@ __device__ void ref(double* refdata,double* max,int refline,int dbn,int dbn_n,in
 		double* refTransfromCon  = new double[(End / 2 - Begin / 2 + 1) * refConLen]();
 		double* refTransfromSignal;
 
-		printf("refline = %d\n",refline);
-		for(int i = 0; i < power(2,dbn_n) * refline; ++i)
-		{
-			printf("refdata[%d] = %f\n",i,refdata[i]);
-		}
 
 		refSignalDSam<<<1,End - Begin + 1>>>(refdata,refTransfromDsam,refTransfromSignal,refDsamLen,Begin,DBN_N,refline);
 		__syncthreads();
@@ -263,8 +449,8 @@ __global__ void refChooseSignal(double* refdata,double* max,int refline,int dbn,
 		printf("选择Alpha波.\n");
 //		int AlphaBegin = static_cast<int>(floor(7.81 * power(2,dbn_n) / 64));
 //		int AlphaEnd   = static_cast<int>(floor(13.28 * power(2,dbn_n) / 64));
-		int AlphaBegin = 1;
-		int AlphaEnd = 4;
+		int AlphaBegin = 0;
+		int AlphaEnd = 1;
 		printf("AlphaBegin = %d\n",AlphaBegin);
 		printf("AlphaEnd = %d\n",AlphaEnd);
 		ref(refdata,max,refline,dbn,dbn_n,AlphaBegin,AlphaEnd);
@@ -343,7 +529,6 @@ __device__ void printData(double* buffer,int row,int line)
 __global__ void decEx(double* dVectorUpSam,int line,int dbn,double* dVectorEx)
 {
 	int decExidx = threadIdx.x;//这个线程号最多只有一组的线程号
-
 	for(int i = 0; i < 2 * dbn - 1; ++i)
 	{
 		dVectorEx[decExidx  * (line + 4 * dbn - 2) + i] 					 = dVectorUpSam[decExidx * line + 2 * dbn -2 - i];
@@ -376,35 +561,59 @@ __device__ void decTransfromEx(double* d_data,double* dVectorUpSam,int line,int 
 
 __global__ void dataCON(double* dVectorEx,double* sdecMaxL,double* sdecMaxH,int dbn,int decCONLen,double* dVectorCON,int decCONidx,int decExLen,int DBN_N)
 {
-	int iidx = threadIdx.x;
-	for(int i = 0; i < 2* dbn; ++i)
+	int iidx = blockIdx.x * blockDim.x + threadIdx.x;
+	if(iidx >= decCONLen)
 	{
-		dVectorCON[2 * decCONidx * decCONLen + iidx] += dVectorEx[decCONidx * decExLen + iidx + i] * sdecMaxL[i];
-		dVectorCON[(2 * decCONidx + 1) * decCONLen + iidx] += dVectorEx[decCONidx * decExLen + iidx + i] * sdecMaxH[i];
+	}else{
+		for(int i = 0; i < 2* dbn; ++i)
+		{
+			dVectorCON[2 * decCONidx * decCONLen + iidx] 	   += dVectorEx[decCONidx * decExLen + iidx + i] * sdecMaxL[i];
+			dVectorCON[(2 * decCONidx + 1) * decCONLen + iidx] += dVectorEx[decCONidx * decExLen + iidx + i] * sdecMaxH[i];
+		}
 	}
 }
 
 __global__ void decTransfromCON(double* dVectorEx,double* sdecMaxL,double*sdecMaxH,int decCONLen,int dbn,double* dVectorCON,int decExLen,int DBN_N)
 {
 	int decCONidx = threadIdx.x;
-	dataCON<<<1,decCONLen>>>(dVectorEx,sdecMaxL,sdecMaxH,dbn,decCONLen,dVectorCON,decCONidx,decExLen,DBN_N);
+	int girdconIdx  = 0;
+	int blockconIdx = 0;
+	if(0 == decCONLen / 1000)
+	{
+		girdconIdx = 1;
+		blockconIdx = decCONLen;
+	}else{
+		girdconIdx  = decCONLen / 1000 + 1;
+		blockconIdx = 1000;
+	}
+	dataCON<<<girdconIdx,blockconIdx>>>(dVectorEx,sdecMaxL,sdecMaxH,dbn,decCONLen,dVectorCON,decCONidx,decExLen,DBN_N);
 	__syncthreads();
 }
 
 __global__ void decUpSam(double* dVectorCON,double*dVectorUpSam,int decCONLen,int decUpSamLen,int DBN_N,int decUpidx)
 {
-	int iUpdx = threadIdx.x;
+	int iUpdx = blockIdx.x * blockDim.x + threadIdx.x;
 	dVectorUpSam[decUpSamLen * decUpidx + iUpdx] = dVectorCON[decCONLen * decUpidx + 2 * iUpdx + 1];
 }
 
 __global__ void decTransfromUpSam(double* dVectorCON,double*dVectorUpSam,int decCONLen,int decUpSamLen,int DBN_N)
 {
 	int decUpidx = threadIdx.x;
-	decUpSam<<<1,decUpSamLen>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N,decUpidx);
+	int gridUpsamIdx  = 0;
+	int blockUpsamIdx = 0;
+	if(decUpSamLen >= 1000)
+	{
+		gridUpsamIdx  = decUpSamLen / 1000 + 1;
+		blockUpsamIdx = 1000;
+	}else{
+		gridUpsamIdx  = 1;
+		blockUpsamIdx = decUpSamLen;
+	}
+	decUpSam<<<gridUpsamIdx,blockUpsamIdx>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N,decUpidx);
 	__syncthreads();
 }
 
-__device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int dbn_n,double*& refdata,int& refline)
+__device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int dbn_n,double*& refdata)
 {
 	/*分解过程*/
 	double* sdecMaxL = new double[2 * dbn]();
@@ -413,63 +622,42 @@ __device__ void dec(double* d_a,double* max,int row,int line,int dbn,int idx,int
 	{
 		sdecMaxL[i] = max[0 * 2 * dbn + i];
 		sdecMaxH[i] = max[1 * 2 * dbn + i];
-		printf("sdecMaxL[%d] = %f\n",i,sdecMaxL[i]);
-		printf("sdecMaxH[%d] = %f\n",i,sdecMaxH[i]);
 	}
 	for(int DBN_N = 0; DBN_N < dbn_n; ++DBN_N)
 	{
 		int decExLen    = line + 4 * dbn - 2;//对称延拓长度
 		int decCONLen   = line + 2 * dbn - 1;//分解卷积长度
 		int decUpSamLen = (line + 2* dbn -1) / 2;//上采样长度
-
-		double* dVectorEx 	  = new double[power(2,DBN_N) * decExLen]();
-		double* dVectorCON    = new double[power(2,DBN_N + 1) * decCONLen]();		//  卷积和内存
+		double* dVectorEx  = new double[power(2,DBN_N) * decExLen]();
+		double* dVectorCON = new double[power(2,DBN_N + 1) * decCONLen]();		//  卷积和内存
 		double* dVectorUpSam; 													//  上采样内存
-
-
-
 		decTransfromEx(d_a,dVectorUpSam,line,idx,dbn,decExLen,dVectorEx,DBN_N);//延拓
-
-		printf("decExLen = %d\n",decExLen);
-		for(int i = 0; i < power(2,DBN_N) * decExLen;++i)
-		{
-			printf("dVectorEx[%d] = %f\n",i,dVectorEx[i]);
-		}
-		printf("\n");
-
-
 		decTransfromCON<<<1,power(2,DBN_N)>>>(dVectorEx,sdecMaxL,sdecMaxH,decCONLen,dbn,dVectorCON,decExLen,DBN_N);//卷积
 		__syncthreads();
-		delete[]dVectorEx;
-
-		printf("decCONLen = %d\n",decCONLen);
-		for(int i = 0; i < power(2,DBN_N + 1) * decCONLen;++i)
-		{
-			printf("dVectorCON[%d] = %f\n",i,dVectorCON[i]);
-		}
 		//只能在这里申请内存,在开头申请内存第二次循环数据为空了.
+		if(DBN_N != 0)
+		{
+			delete[]dVectorUpSam;
+		}
 		dVectorUpSam = new double[power(2,DBN_N + 1) * decUpSamLen]();
 		decTransfromUpSam<<<1,power(2,DBN_N + 1)>>>(dVectorCON,dVectorUpSam,decCONLen,decUpSamLen,DBN_N);
 		__syncthreads();
-		delete[]dVectorCON;
-
-		printf("decUpSamLen = %d\n",decUpSamLen);
-		for(int i = 0; i < power(2,DBN_N + 1) * decUpSamLen;++i)
-		{
-			printf("dVectorUpSam[%d] = %f\n",i,dVectorUpSam[i]);
-		}
 		//更新系数,进行下一层分解
 		line = decUpSamLen;
-		if(DBN_N == dbn_n - 1)//重构信号长度
+		delete[]dVectorEx;
+		delete[]dVectorCON;
+		if(dbn_n - 1 == DBN_N)//重构信号长度
 		{
-			refline = line;
-			refdata = new double[power(2,dbn_n)*refline];
 			refdata = dVectorUpSam;
+			memcpy(refdata + line * power(2,dbn_n) * idx,dVectorUpSam,sizeof(double) * line * power(2,dbn_n));
+			for(int i = 0; i < line; ++i)
+			{
+				printf("dVectorUpSam[%d] =  %f\n",i,dVectorUpSam[i]);
+				printf("refdata[%d] =  %f\n",i,refdata[i]);
+			}
 			delete[]dVectorUpSam;
 		}
 	}
 	delete[]sdecMaxL;
 	delete[]sdecMaxH;
 }
-
-

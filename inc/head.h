@@ -14,6 +14,13 @@
 #include <cassert>
 #include <cstdlib>
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
 
 #include <cuda.h>
 #include <numeric>
@@ -67,6 +74,8 @@
 
 ///全局函数//////////////////////////////////
 int H_power(int base, int exponent);//指数函数
+void mkdir_file(int file_m,int file_n);
+std::string mkdir_txt(int file_m,int file_n,int n);
 //void threadrFile1(RF prf,std::string str,std::string str1,int m,int n);
 //void threadrFile2(RF prf,std::string str,std::string str1,int m,int n);
 

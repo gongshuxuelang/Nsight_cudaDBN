@@ -1,5 +1,5 @@
 ################################################################################
-# 自动生成的文件。不要编辑！
+# Automatically-generated file. Do not edit!
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -30,11 +30,11 @@ CU_DEPS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 src/%.o: ../src/%.cu
-	@echo '正在构建文件： $<'
-	@echo '正在调用： NVCC Compiler'
+	@echo 'Building file: $<'
+	@echo 'Invoking: NVCC Compiler'
 	/usr/local/cuda-10.0/bin/nvcc -I"/home/lcx/code/cudaworkspace/cudaDBN/inc" -G -g -O0 -std=c++11 -gencode arch=compute_52,code=sm_52 -m64 -odir "src" -M -o "$(@:%.o=%.d)" "$<"
 	/usr/local/cuda-10.0/bin/nvcc -I"/home/lcx/code/cudaworkspace/cudaDBN/inc" -G -g -O0 -std=c++11 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -m64  -x cu -o  "$@" "$<"
-	@echo '已结束构建： $<'
+	@echo 'Finished building: $<'
 	@echo ' '
 
 

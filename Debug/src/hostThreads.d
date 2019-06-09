@@ -5,6 +5,7 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/include/features.h \
     /usr/include/x86_64-linux-gnu/sys/cdefs.h \
     /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+    /usr/include/x86_64-linux-gnu/bits/long-double.h \
     /usr/include/x86_64-linux-gnu/gnu/stubs.h \
     /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
     /usr/local/cuda-10.0/bin/..//include/builtin_types.h \
@@ -12,16 +13,17 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/crt/host_defines.h \
     /usr/local/cuda-10.0/bin/..//include/driver_types.h \
     /usr/local/cuda-10.0/bin/..//include/vector_types.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/limits.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/syslimits.h \
+    /usr/lib/gcc/x86_64-linux-gnu/7/include-fixed/limits.h \
+    /usr/lib/gcc/x86_64-linux-gnu/7/include-fixed/syslimits.h \
     /usr/include/limits.h \
+    /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
     /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
     /usr/include/x86_64-linux-gnu/bits/local_lim.h \
     /usr/include/linux/limits.h \
     /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
     /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
-    /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/stddef.h \
+    /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+    /usr/lib/gcc/x86_64-linux-gnu/7/include/stddef.h \
     /usr/local/cuda-10.0/bin/..//include/surface_types.h \
     /usr/local/cuda-10.0/bin/..//include/texture_types.h \
     /usr/local/cuda-10.0/bin/..//include/library_types.h \
@@ -33,58 +35,87 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/vector_functions.hpp \
     /usr/local/cuda-10.0/bin/..//include/crt/common_functions.h \
     /usr/include/string.h \
-    /usr/include/xlocale.h \
+    /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+    /usr/include/strings.h \
     /usr/include/time.h \
     /usr/include/x86_64-linux-gnu/bits/time.h \
     /usr/include/x86_64-linux-gnu/bits/types.h \
     /usr/include/x86_64-linux-gnu/bits/typesizes.h \
     /usr/include/x86_64-linux-gnu/bits/timex.h \
-    /usr/include/c++/5/new \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/c++config.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
-    /usr/include/c++/5/exception \
-    /usr/include/c++/5/bits/atomic_lockfree_defines.h \
-    /usr/include/c++/5/bits/exception_ptr.h \
-    /usr/include/c++/5/bits/exception_defines.h \
-    /usr/include/c++/5/bits/nested_exception.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+    /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+    /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+    /usr/include/c++/7/new \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/c++config.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/os_defines.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/cpu_defines.h \
+    /usr/include/c++/7/exception \
+    /usr/include/c++/7/bits/exception.h \
+    /usr/include/c++/7/bits/exception_ptr.h \
+    /usr/include/c++/7/bits/exception_defines.h \
+    /usr/include/c++/7/bits/cxxabi_init_exception.h \
+    /usr/include/c++/7/typeinfo \
+    /usr/include/c++/7/bits/hash_bytes.h \
+    /usr/include/c++/7/bits/nested_exception.h \
+    /usr/include/c++/7/bits/move.h \
+    /usr/include/c++/7/bits/concept_check.h \
+    /usr/include/c++/7/type_traits \
     /usr/include/stdio.h \
-    /usr/include/libio.h \
-    /usr/include/_G_config.h \
-    /usr/include/wchar.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
+    /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+    /usr/include/x86_64-linux-gnu/bits/libio.h \
+    /usr/include/x86_64-linux-gnu/bits/_G_config.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
+    /usr/lib/gcc/x86_64-linux-gnu/7/include/stdarg.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
     /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+    /usr/include/c++/7/stdlib.h \
+    /usr/include/c++/7/cstdlib \
     /usr/include/stdlib.h \
     /usr/include/x86_64-linux-gnu/bits/waitflags.h \
     /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+    /usr/include/x86_64-linux-gnu/bits/floatn.h \
+    /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+    /usr/include/x86_64-linux-gnu/sys/types.h \
+    /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
     /usr/include/endian.h \
     /usr/include/x86_64-linux-gnu/bits/endian.h \
     /usr/include/x86_64-linux-gnu/bits/byteswap.h \
     /usr/include/x86_64-linux-gnu/bits/byteswap-16.h \
-    /usr/include/x86_64-linux-gnu/sys/types.h \
+    /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
     /usr/include/x86_64-linux-gnu/sys/select.h \
     /usr/include/x86_64-linux-gnu/bits/select.h \
-    /usr/include/x86_64-linux-gnu/bits/sigset.h \
+    /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
     /usr/include/x86_64-linux-gnu/sys/sysmacros.h \
+    /usr/include/x86_64-linux-gnu/bits/sysmacros.h \
     /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+    /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+    /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
     /usr/include/alloca.h \
     /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+    /usr/include/c++/7/bits/std_abs.h \
     /usr/include/assert.h \
     /usr/local/cuda-10.0/bin/..//include/crt/math_functions.h \
+    /usr/include/c++/7/math.h \
+    /usr/include/c++/7/cmath \
+    /usr/include/c++/7/bits/cpp_type_traits.h \
+    /usr/include/c++/7/ext/type_traits.h \
     /usr/include/math.h \
     /usr/include/x86_64-linux-gnu/bits/math-vector.h \
     /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
-    /usr/include/x86_64-linux-gnu/bits/huge_val.h \
-    /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
-    /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
-    /usr/include/x86_64-linux-gnu/bits/inf.h \
-    /usr/include/x86_64-linux-gnu/bits/nan.h \
-    /usr/include/x86_64-linux-gnu/bits/mathdef.h \
+    /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+    /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+    /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+    /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
     /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
-    /usr/include/c++/5/cmath \
-    /usr/include/c++/5/bits/cpp_type_traits.h \
-    /usr/include/c++/5/ext/type_traits.h \
-    /usr/include/c++/5/cstdlib \
+    /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
     /usr/local/cuda-10.0/bin/..//include/crt/math_functions.hpp \
     /usr/local/cuda-10.0/bin/..//include/cuda_surface_types.h \
     /usr/local/cuda-10.0/bin/..//include/cuda_texture_types.h \
@@ -118,202 +149,162 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/surface_indirect_functions.h \
     /usr/local/cuda-10.0/bin/..//include/device_launch_parameters.h \
     /home/lcx/code/cudaworkspace/cudaDBN/inc/head.h \
-    /usr/include/c++/5/iostream \
-    /usr/include/c++/5/ostream \
-    /usr/include/c++/5/ios \
-    /usr/include/c++/5/iosfwd \
-    /usr/include/c++/5/bits/stringfwd.h \
-    /usr/include/c++/5/bits/memoryfwd.h \
-    /usr/include/c++/5/bits/postypes.h \
-    /usr/include/c++/5/cwchar \
+    /usr/include/c++/7/iostream \
+    /usr/include/c++/7/ostream \
+    /usr/include/c++/7/ios \
+    /usr/include/c++/7/iosfwd \
+    /usr/include/c++/7/bits/stringfwd.h \
+    /usr/include/c++/7/bits/memoryfwd.h \
+    /usr/include/c++/7/bits/postypes.h \
+    /usr/include/c++/7/cwchar \
+    /usr/include/wchar.h \
     /usr/include/x86_64-linux-gnu/bits/wchar.h \
-    /usr/include/c++/5/bits/char_traits.h \
-    /usr/include/c++/5/bits/stl_algobase.h \
-    /usr/include/c++/5/bits/functexcept.h \
-    /usr/include/c++/5/ext/numeric_traits.h \
-    /usr/include/c++/5/bits/stl_pair.h \
-    /usr/include/c++/5/bits/move.h \
-    /usr/include/c++/5/bits/concept_check.h \
-    /usr/include/c++/5/type_traits \
-    /usr/include/c++/5/bits/stl_iterator_base_types.h \
-    /usr/include/c++/5/bits/stl_iterator_base_funcs.h \
-    /usr/include/c++/5/debug/debug.h \
-    /usr/include/c++/5/bits/stl_iterator.h \
-    /usr/include/c++/5/bits/ptr_traits.h \
-    /usr/include/c++/5/bits/predefined_ops.h \
-    /usr/include/c++/5/cstdint \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h \
+    /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+    /usr/include/c++/7/bits/char_traits.h \
+    /usr/include/c++/7/bits/stl_algobase.h \
+    /usr/include/c++/7/bits/functexcept.h \
+    /usr/include/c++/7/ext/numeric_traits.h \
+    /usr/include/c++/7/bits/stl_pair.h \
+    /usr/include/c++/7/bits/stl_iterator_base_types.h \
+    /usr/include/c++/7/bits/stl_iterator_base_funcs.h \
+    /usr/include/c++/7/debug/assertions.h \
+    /usr/include/c++/7/bits/stl_iterator.h \
+    /usr/include/c++/7/bits/ptr_traits.h \
+    /usr/include/c++/7/debug/debug.h \
+    /usr/include/c++/7/bits/predefined_ops.h \
+    /usr/include/c++/7/cstdint \
+    /usr/lib/gcc/x86_64-linux-gnu/7/include/stdint.h \
     /usr/include/stdint.h \
-    /usr/include/c++/5/bits/localefwd.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/c++locale.h \
-    /usr/include/c++/5/clocale \
+    /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+    /usr/include/c++/7/bits/localefwd.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h \
+    /usr/include/c++/7/clocale \
     /usr/include/locale.h \
     /usr/include/x86_64-linux-gnu/bits/locale.h \
-    /usr/include/c++/5/cctype \
+    /usr/include/c++/7/cctype \
     /usr/include/ctype.h \
-    /usr/include/c++/5/bits/ios_base.h \
-    /usr/include/c++/5/ext/atomicity.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/gthr.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/gthr-default.h \
+    /usr/include/c++/7/bits/ios_base.h \
+    /usr/include/c++/7/ext/atomicity.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/gthr.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/gthr-default.h \
     /usr/include/pthread.h \
     /usr/include/sched.h \
     /usr/include/x86_64-linux-gnu/bits/sched.h \
+    /usr/include/x86_64-linux-gnu/bits/cpu-set.h \
     /usr/include/x86_64-linux-gnu/bits/setjmp.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/atomic_word.h \
-    /usr/include/c++/5/bits/locale_classes.h \
-    /usr/include/c++/5/string \
-    /usr/include/c++/5/bits/allocator.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/c++allocator.h \
-    /usr/include/c++/5/ext/new_allocator.h \
-    /usr/include/c++/5/bits/ostream_insert.h \
-    /usr/include/c++/5/bits/cxxabi_forced.h \
-    /usr/include/c++/5/bits/stl_function.h \
-    /usr/include/c++/5/backward/binders.h \
-    /usr/include/c++/5/bits/range_access.h \
-    /usr/include/c++/5/initializer_list \
-    /usr/include/c++/5/bits/basic_string.h \
-    /usr/include/c++/5/ext/alloc_traits.h \
-    /usr/include/c++/5/bits/alloc_traits.h \
-    /usr/include/c++/5/ext/string_conversions.h \
-    /usr/include/c++/5/cstdio \
-    /usr/include/c++/5/cerrno \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/atomic_word.h \
+    /usr/include/c++/7/bits/locale_classes.h \
+    /usr/include/c++/7/string \
+    /usr/include/c++/7/bits/allocator.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/c++allocator.h \
+    /usr/include/c++/7/ext/new_allocator.h \
+    /usr/include/c++/7/bits/ostream_insert.h \
+    /usr/include/c++/7/bits/cxxabi_forced.h \
+    /usr/include/c++/7/bits/stl_function.h \
+    /usr/include/c++/7/backward/binders.h \
+    /usr/include/c++/7/bits/range_access.h \
+    /usr/include/c++/7/initializer_list \
+    /usr/include/c++/7/bits/basic_string.h \
+    /usr/include/c++/7/ext/alloc_traits.h \
+    /usr/include/c++/7/bits/alloc_traits.h \
+    /usr/include/c++/7/ext/string_conversions.h \
+    /usr/include/c++/7/cstdio \
+    /usr/include/c++/7/cerrno \
     /usr/include/errno.h \
     /usr/include/x86_64-linux-gnu/bits/errno.h \
     /usr/include/linux/errno.h \
     /usr/include/x86_64-linux-gnu/asm/errno.h \
     /usr/include/asm-generic/errno.h \
     /usr/include/asm-generic/errno-base.h \
-    /usr/include/c++/5/bits/functional_hash.h \
-    /usr/include/c++/5/bits/hash_bytes.h \
-    /usr/include/c++/5/bits/basic_string.tcc \
-    /usr/include/c++/5/bits/locale_classes.tcc \
-    /usr/include/c++/5/system_error \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/error_constants.h \
-    /usr/include/c++/5/stdexcept \
-    /usr/include/c++/5/streambuf \
-    /usr/include/c++/5/bits/streambuf.tcc \
-    /usr/include/c++/5/bits/basic_ios.h \
-    /usr/include/c++/5/bits/locale_facets.h \
-    /usr/include/c++/5/cwctype \
+    /usr/include/c++/7/bits/functional_hash.h \
+    /usr/include/c++/7/bits/basic_string.tcc \
+    /usr/include/c++/7/bits/locale_classes.tcc \
+    /usr/include/c++/7/system_error \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/error_constants.h \
+    /usr/include/c++/7/stdexcept \
+    /usr/include/c++/7/streambuf \
+    /usr/include/c++/7/bits/streambuf.tcc \
+    /usr/include/c++/7/bits/basic_ios.h \
+    /usr/include/c++/7/bits/locale_facets.h \
+    /usr/include/c++/7/cwctype \
     /usr/include/wctype.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/ctype_base.h \
-    /usr/include/c++/5/bits/streambuf_iterator.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/ctype_inline.h \
-    /usr/include/c++/5/bits/locale_facets.tcc \
-    /usr/include/c++/5/bits/basic_ios.tcc \
-    /usr/include/c++/5/bits/ostream.tcc \
-    /usr/include/c++/5/istream \
-    /usr/include/c++/5/bits/istream.tcc \
-    /usr/include/c++/5/thread \
-    /usr/include/c++/5/chrono \
-    /usr/include/c++/5/ratio \
-    /usr/include/c++/5/limits \
-    /usr/include/c++/5/ctime \
-    /usr/include/c++/5/bits/parse_numbers.h \
-    /usr/include/c++/5/functional \
-    /usr/include/c++/5/typeinfo \
-    /usr/include/c++/5/tuple \
-    /usr/include/c++/5/utility \
-    /usr/include/c++/5/bits/stl_relops.h \
-    /usr/include/c++/5/array \
-    /usr/include/c++/5/bits/uses_allocator.h \
-    /usr/include/c++/5/memory \
-    /usr/include/c++/5/bits/stl_construct.h \
-    /usr/include/c++/5/bits/stl_uninitialized.h \
-    /usr/include/c++/5/bits/stl_tempbuf.h \
-    /usr/include/c++/5/bits/stl_raw_storage_iter.h \
-    /usr/include/c++/5/ext/concurrence.h \
-    /usr/include/c++/5/bits/unique_ptr.h \
-    /usr/include/c++/5/bits/shared_ptr.h \
-    /usr/include/c++/5/bits/shared_ptr_base.h \
-    /usr/include/c++/5/bits/allocated_ptr.h \
-    /usr/include/c++/5/ext/aligned_buffer.h \
-    /usr/include/c++/5/bits/shared_ptr_atomic.h \
-    /usr/include/c++/5/bits/atomic_base.h \
-    /usr/include/c++/5/backward/auto_ptr.h \
-    /usr/include/c++/5/fstream \
-    /usr/include/c++/5/bits/codecvt.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/basic_file.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/c++io.h \
-    /usr/include/c++/5/bits/fstream.tcc \
-    /usr/include/c++/5/iomanip \
-    /usr/include/c++/5/locale \
-    /usr/include/c++/5/bits/locale_facets_nonio.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/time_members.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/messages_members.h \
+    /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/ctype_base.h \
+    /usr/include/c++/7/bits/streambuf_iterator.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/ctype_inline.h \
+    /usr/include/c++/7/bits/locale_facets.tcc \
+    /usr/include/c++/7/bits/basic_ios.tcc \
+    /usr/include/c++/7/bits/ostream.tcc \
+    /usr/include/c++/7/istream \
+    /usr/include/c++/7/bits/istream.tcc \
+    /usr/include/c++/7/thread \
+    /usr/include/c++/7/chrono \
+    /usr/include/c++/7/ratio \
+    /usr/include/c++/7/limits \
+    /usr/include/c++/7/ctime \
+    /usr/include/c++/7/bits/parse_numbers.h \
+    /usr/include/c++/7/memory \
+    /usr/include/c++/7/bits/stl_construct.h \
+    /usr/include/c++/7/bits/stl_uninitialized.h \
+    /usr/include/c++/7/bits/stl_tempbuf.h \
+    /usr/include/c++/7/bits/stl_raw_storage_iter.h \
+    /usr/include/c++/7/ext/concurrence.h \
+    /usr/include/c++/7/bits/uses_allocator.h \
+    /usr/include/c++/7/bits/unique_ptr.h \
+    /usr/include/c++/7/utility \
+    /usr/include/c++/7/bits/stl_relops.h \
+    /usr/include/c++/7/tuple \
+    /usr/include/c++/7/array \
+    /usr/include/c++/7/bits/invoke.h \
+    /usr/include/c++/7/bits/shared_ptr.h \
+    /usr/include/c++/7/bits/shared_ptr_base.h \
+    /usr/include/c++/7/bits/allocated_ptr.h \
+    /usr/include/c++/7/bits/refwrap.h \
+    /usr/include/c++/7/ext/aligned_buffer.h \
+    /usr/include/c++/7/bits/shared_ptr_atomic.h \
+    /usr/include/c++/7/bits/atomic_base.h \
+    /usr/include/c++/7/bits/atomic_lockfree_defines.h \
+    /usr/include/c++/7/backward/auto_ptr.h \
+    /usr/include/c++/7/fstream \
+    /usr/include/c++/7/bits/codecvt.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/c++io.h \
+    /usr/include/c++/7/bits/fstream.tcc \
+    /usr/include/c++/7/iomanip \
+    /usr/include/c++/7/locale \
+    /usr/include/c++/7/bits/locale_facets_nonio.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/time_members.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h \
     /usr/include/libintl.h \
-    /usr/include/c++/5/bits/locale_facets_nonio.tcc \
-    /usr/include/c++/5/bits/locale_conv.h \
-    /usr/include/c++/5/vector \
-    /usr/include/c++/5/bits/stl_vector.h \
-    /usr/include/c++/5/bits/stl_bvector.h \
-    /usr/include/c++/5/bits/vector.tcc \
-    /usr/include/c++/5/algorithm \
-    /usr/include/c++/5/bits/stl_algo.h \
-    /usr/include/c++/5/bits/algorithmfwd.h \
-    /usr/include/c++/5/bits/stl_heap.h \
-    /usr/include/c++/5/random \
-    /usr/include/c++/5/bits/random.h \
-    /usr/include/c++/5/bits/uniform_int_dist.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/opt_random.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/x86intrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/ia32intrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/mmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xmmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/mm_malloc.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/emmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/pmmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/tmmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/ammintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/smmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/popcntintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/wmmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/immintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avxintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx2intrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512fintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512erintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512pfintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512cdintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512vlintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512bwintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512dqintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512vlbwintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512vldqintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512ifmaintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512ifmavlintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512vbmiintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/avx512vbmivlintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/shaintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/lzcntintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/bmiintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/bmi2intrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/fmaintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/f16cintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/rtmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xtestintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/mm3dnow.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/prfchwintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/fma4intrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xopintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/lwpintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/tbmintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/rdseedintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/fxsrintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xsaveintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xsaveoptintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/adxintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/clwbintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/pcommitintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/clflushoptintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xsavesintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/xsavecintrin.h \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/mwaitxintrin.h \
-    /usr/include/c++/5/bits/random.tcc \
-    /usr/include/c++/5/numeric \
-    /usr/include/c++/5/bits/stl_numeric.h \
-    /usr/include/c++/5/cassert \
+    /usr/include/c++/7/bits/locale_facets_nonio.tcc \
+    /usr/include/c++/7/bits/locale_conv.h \
+    /usr/include/c++/7/vector \
+    /usr/include/c++/7/bits/stl_vector.h \
+    /usr/include/c++/7/bits/stl_bvector.h \
+    /usr/include/c++/7/bits/vector.tcc \
+    /usr/include/c++/7/algorithm \
+    /usr/include/c++/7/bits/stl_algo.h \
+    /usr/include/c++/7/bits/algorithmfwd.h \
+    /usr/include/c++/7/bits/stl_heap.h \
+    /usr/include/c++/7/bits/uniform_int_dist.h \
+    /usr/include/c++/7/cassert \
+    /usr/include/unistd.h \
+    /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+    /usr/include/x86_64-linux-gnu/bits/environments.h \
+    /usr/include/x86_64-linux-gnu/bits/confname.h \
+    /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+    /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+    /usr/include/x86_64-linux-gnu/sys/stat.h \
+    /usr/include/x86_64-linux-gnu/bits/stat.h \
+    /usr/include/fcntl.h \
+    /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+    /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
+    /usr/include/linux/falloc.h \
     /usr/local/cuda-10.0/bin/..//include/cuda.h \
+    /usr/include/c++/7/numeric \
+    /usr/include/c++/7/bits/stl_numeric.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/reduce.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/config.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/config/config.h \
@@ -329,8 +320,8 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/config/global_workarounds.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/execution_policy.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/iterator/iterator_traits.h \
-    /usr/include/c++/5/iterator \
-    /usr/include/c++/5/bits/stream_iterator.h \
+    /usr/include/c++/7/iterator \
+    /usr/include/c++/7/bits/stream_iterator.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/iterator/detail/iterator_traversal_tags.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/iterator/detail/host_system_tag.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/cpp/detail/execution_policy.h \
@@ -361,6 +352,8 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/detail/generic/tag.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/detail/generic/reduce.inl \
     /usr/local/cuda-10.0/bin/..//include/thrust/functional.h \
+    /usr/include/c++/7/functional \
+    /usr/include/c++/7/bits/std_function.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/functional/placeholder.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/functional/actor.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/tuple.h \
@@ -398,7 +391,7 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/raw_reference_cast.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/raw_pointer_cast.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/type_traits/pointer_traits.h \
-    /usr/include/c++/5/cstddef \
+    /usr/include/c++/7/cstddef \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/tuple_transform.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/detail/tuple_meta_transform.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/iterator/detail/tuple_of_iterator_references.h \
@@ -413,7 +406,7 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/error_code.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/detail/errno.h \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/detail/error_category.inl \
-    /usr/include/c++/5/cstring \
+    /usr/include/c++/7/cstring \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/detail/error_code.inl \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/detail/error_condition.inl \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/system_error.h \
@@ -443,8 +436,8 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/cuda/detail/cub/block/block_exchange.cuh \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/cuda/detail/cub/block/../util_ptx.cuh \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/cuda/detail/cub/block/../util_type.cuh \
-    /usr/include/c++/5/cfloat \
-    /usr/lib/gcc/x86_64-linux-gnu/5/include/float.h \
+    /usr/include/c++/7/cfloat \
+    /usr/lib/gcc/x86_64-linux-gnu/7/include/float.h \
     /usr/local/cuda-10.0/bin/..//include/cuda_fp16.h \
     /usr/local/cuda-10.0/bin/..//include/cuda_fp16.hpp \
     /usr/local/cuda-10.0/bin/..//include/thrust/system/cuda/detail/cub/block/../util_macro.cuh \
@@ -853,11 +846,6 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/config/compiler/gcc.hpp \
     /usr/local/include/boost/config/detail/select_stdlib_config.hpp \
     /usr/local/include/boost/config/stdlib/libstdcpp3.hpp \
-    /usr/include/unistd.h \
-    /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
-    /usr/include/x86_64-linux-gnu/bits/environments.h \
-    /usr/include/x86_64-linux-gnu/bits/confname.h \
-    /usr/include/getopt.h \
     /usr/local/include/boost/config/detail/select_platform_config.hpp \
     /usr/local/include/boost/config/platform/linux.hpp \
     /usr/local/include/boost/config/detail/posix_features.hpp \
@@ -891,9 +879,9 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/detail/sp_typeinfo.hpp \
     /usr/local/include/boost/core/typeinfo.hpp \
     /usr/local/include/boost/core/demangle.hpp \
-    /usr/include/c++/5/cxxabi.h \
-    /usr/include/x86_64-linux-gnu/c++/5/bits/cxxabi_tweaks.h \
-    /usr/include/c++/5/atomic \
+    /usr/include/c++/7/cxxabi.h \
+    /usr/include/x86_64-linux-gnu/c++/7/bits/cxxabi_tweaks.h \
+    /usr/include/c++/7/atomic \
     /usr/local/include/boost/smart_ptr/detail/sp_counted_impl.hpp \
     /usr/local/include/boost/core/addressof.hpp \
     /usr/local/include/boost/smart_ptr/detail/sp_convertible.hpp \
@@ -982,10 +970,10 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/system/detail/generic_category.hpp \
     /usr/local/include/boost/system/detail/system_category_posix.hpp \
     /usr/local/include/boost/system/detail/std_interoperability.hpp \
-    /usr/include/c++/5/map \
-    /usr/include/c++/5/bits/stl_tree.h \
-    /usr/include/c++/5/bits/stl_map.h \
-    /usr/include/c++/5/bits/stl_multimap.h \
+    /usr/include/c++/7/map \
+    /usr/include/c++/7/bits/stl_tree.h \
+    /usr/include/c++/7/bits/stl_map.h \
+    /usr/include/c++/7/bits/stl_multimap.h \
     /usr/local/include/boost/lexical_cast.hpp \
     /usr/local/include/boost/range/iterator_range_core.hpp \
     /usr/local/include/boost/iterator/iterator_traits.hpp \
@@ -1201,7 +1189,7 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/range/detail/misc_concept.hpp \
     /usr/local/include/boost/type_traits/make_unsigned.hpp \
     /usr/local/include/boost/type_traits/is_signed.hpp \
-    /usr/include/c++/5/climits \
+    /usr/include/c++/7/climits \
     /usr/local/include/boost/type_traits/is_unsigned.hpp \
     /usr/local/include/boost/type_traits/add_volatile.hpp \
     /usr/local/include/boost/range/detail/has_member_size.hpp \
@@ -1303,8 +1291,8 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/move/detail/std_ns_begin.hpp \
     /usr/local/include/boost/move/detail/std_ns_end.hpp \
     /usr/local/include/boost/lexical_cast/detail/converter_lexical_streams.hpp \
-    /usr/include/c++/5/sstream \
-    /usr/include/c++/5/bits/sstream.tcc \
+    /usr/include/c++/7/sstream \
+    /usr/include/c++/7/bits/sstream.tcc \
     /usr/local/include/boost/lexical_cast/detail/lcast_char_constants.hpp \
     /usr/local/include/boost/lexical_cast/detail/lcast_unsigned_converters.hpp \
     /usr/local/include/boost/noncopyable.hpp \
@@ -1455,7 +1443,7 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/mpl/greater_equal.hpp \
     /usr/local/include/boost/mpl/aux_/preprocessed/gcc/greater_equal.hpp \
     /usr/local/include/boost/config/no_tr1/complex.hpp \
-    /usr/include/c++/5/complex \
+    /usr/include/c++/7/complex \
     /usr/local/include/boost/math/special_functions/detail/fp_traits.hpp \
     /usr/local/include/boost/predef/other/endian.h \
     /usr/local/include/boost/predef/library/c/gnu.h \
@@ -1750,9 +1738,9 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/thread/detail/make_tuple_indices.hpp \
     /usr/local/include/boost/thread/detail/invoke.hpp \
     /usr/local/include/boost/thread/detail/is_convertible.hpp \
-    /usr/include/c++/5/list \
-    /usr/include/c++/5/bits/stl_list.h \
-    /usr/include/c++/5/bits/list.tcc \
+    /usr/include/c++/7/list \
+    /usr/include/c++/7/bits/stl_list.h \
+    /usr/include/c++/7/bits/list.tcc \
     /usr/local/include/boost/core/ref.hpp \
     /usr/local/include/boost/bind.hpp \
     /usr/local/include/boost/bind/bind.hpp \
@@ -1780,16 +1768,16 @@ src/hostThreads.o : ../src/hostThreads.cu \
     /usr/local/include/boost/container_hash/detail/float_functions.hpp \
     /usr/local/include/boost/container_hash/detail/limits.hpp \
     /usr/local/include/boost/integer/static_log2.hpp \
-    /usr/include/c++/5/typeindex \
+    /usr/include/c++/7/typeindex \
     /usr/local/include/boost/container_hash/extensions.hpp \
     /usr/local/include/boost/detail/container_fwd.hpp \
-    /usr/include/c++/5/deque \
-    /usr/include/c++/5/bits/stl_deque.h \
-    /usr/include/c++/5/bits/deque.tcc \
-    /usr/include/c++/5/set \
-    /usr/include/c++/5/bits/stl_set.h \
-    /usr/include/c++/5/bits/stl_multiset.h \
-    /usr/include/c++/5/bitset \
+    /usr/include/c++/7/deque \
+    /usr/include/c++/7/bits/stl_deque.h \
+    /usr/include/c++/7/bits/deque.tcc \
+    /usr/include/c++/7/set \
+    /usr/include/c++/7/bits/stl_set.h \
+    /usr/include/c++/7/bits/stl_multiset.h \
+    /usr/include/c++/7/bitset \
     /usr/local/include/boost/thread/detail/thread_interruption.hpp \
     /usr/local/include/boost/thread/condition_variable.hpp \
     /usr/local/include/boost/thread/pthread/condition_variable.hpp \
