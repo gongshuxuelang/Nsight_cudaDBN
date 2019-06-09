@@ -11,7 +11,7 @@ void threadHostToDevice0(std::vector<double>& Hvec, std::vector<double>& maxVect
     }
 	cudaSetDevice(0);																//启动GPU0
     double* DeviceDecDataFinsh;														//分解结果的数据
-    double* HostDecDataFinsh = new double[decDataLen * H_power(2,dbn_n) * row]();   //分解结果的数据
+    double* HostDecDataFinsh = new double[decDataLen * HD_power(dbn_n) * row]();   //分解结果的数据
 	double* d_a;																	//申明显存地址
 	double* max_data;																//申请矩阵地址
 	double* maxBuffer = new double[8 * dbn]();
@@ -44,15 +44,15 @@ void threadHostToDevice0(std::vector<double>& Hvec, std::vector<double>& maxVect
 		exit(-1);
 	}
 
-    cudaMalloc((void**)&DeviceDecDataFinsh,sizeof(double) * decDataLen * H_power(2,dbn_n) * row); //分解结果数据
+    cudaMalloc((void**)&DeviceDecDataFinsh,sizeof(double) * decDataLen * HD_power(dbn_n) * row); //分解结果数据
     cudaMalloc((void**)&max_data,sizeof(double) * 8 * dbn); //申请矩阵内存
 	cudaMalloc((void**)&d_a,sizeof(double) * row * line);	//申请显存大小
 	cudaMemcpy(d_a,buffer,sizeof(double) * row * line,cudaMemcpyHostToDevice);//内存数据导入到显存
 	cudaMemcpy(max_data,maxBuffer,sizeof(double) * 8 * dbn,cudaMemcpyHostToDevice);
 
 	GPU0<<<1,row>>>(DeviceDecDataFinsh,d_a,max_data,row,line,dbn,dbn_n,decDataLen);					//启动核函数
-
-	cudaMemcpy(HostDecDataFinsh,DeviceDecDataFinsh,sizeof(double) * decDataLen * H_power(2,dbn_n) * row,cudaMemcpyDeviceToHost);
+	cudaMemcpy(HostDecDataFinsh,DeviceDecDataFinsh,sizeof(double) * decDataLen * HD_power(dbn_n) * row,cudaMemcpyDeviceToHost);
+	cudaDeviceReset();
 
 //	for(int i = 0; i < decDataLen * H_power(2,dbn_n); ++i)
 //	{
@@ -62,11 +62,11 @@ void threadHostToDevice0(std::vector<double>& Hvec, std::vector<double>& maxVect
 	for(int k = 0; k < row; ++k)
 	{
 	    std::ofstream WD(mkdir_txt(1,1,k + 1));
-	    for(uint i = 0; i < H_power(2,dbn_n); ++i)
+	    for(uint i = 0; i < HD_power(dbn_n); ++i)
 	    {
 	        for(uint j = 0; j < decDataLen; ++j)
 	        {
-	            WD << std::setprecision(16) << HostDecDataFinsh[k * H_power(2,dbn_n) * decDataLen + decDataLen * i + j] << " ";
+	            WD << std::setprecision(16) << HostDecDataFinsh[k * HD_power(dbn_n) * decDataLen + decDataLen * i + j] << " ";
 	        }
 	        WD << std::endl;
 	    }

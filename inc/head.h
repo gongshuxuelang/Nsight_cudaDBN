@@ -74,6 +74,7 @@
 
 ///全局函数//////////////////////////////////
 int H_power(int base, int exponent);//指数函数
+int HD_power(int n);
 void mkdir_file(int file_m,int file_n);
 std::string mkdir_txt(int file_m,int file_n,int n);
 //void threadrFile1(RF prf,std::string str,std::string str1,int m,int n);

@@ -3,6 +3,7 @@
 
 /*通用函数*/
 __device__ int  power(int base, int exponent);
+__device__ int T_power(int n);
 __device__ void printData(double* buffer,int row,int line);
 __device__ void printMax(double* max,int dbn);
 __global__ void GPU0(double* DeviceDecDataFinsh,double* d_a,double* max,int row,int line,int dbn,int dbn_n,int finsh);

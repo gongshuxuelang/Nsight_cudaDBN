@@ -21,6 +21,13 @@ std::string mkdir_txt(int file_m,int file_n,int n)
     DIR = DIR + "/s"+ FILE_NAME+ "_" + num + "/s" + FILE_NAME + "_" + num + "_" + NEMBER_NAME + ".txt"; //  /s1/s1_1/s1_1_n.txt
     return DIR;
 }
+
+int HD_power(int n)
+{
+	int m = 1;
+	m = m << n;
+	return m;
+}
 int H_power(int base, int exponent)
 {
 	int result = 1;	
